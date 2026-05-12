@@ -15,6 +15,12 @@
         LoadNik()
     End Sub
 
+    Public Sub RefreshDataTanggungan()
+        TampilTanggungan()
+        LoadNik()
+        Kosong()
+    End Sub
+
     Private Sub TampilTanggungan()
         dgvTanggungan.DataSource = getAllTanggunganData()
     End Sub

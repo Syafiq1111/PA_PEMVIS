@@ -80,6 +80,9 @@
                 MessageBox.Show("Data berhasil dihapus", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 TampilData()
                 Kosong()
+                If Form2.Visible Then
+                    Form2.RefreshDataTanggungan()
+                End If
             End If
         End If
     End Sub
