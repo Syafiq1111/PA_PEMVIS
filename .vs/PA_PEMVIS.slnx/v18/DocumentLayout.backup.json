@@ -1,0 +1,66 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\PA_PEMVIS\\PA_PEMVIS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DB8DD3AE-B2DF-41DC-A962-C975B2EA0F3F}|PA_PEMVIS\\PA_PEMVIS.vbproj|d:\\pa_pemvis\\pa_pemvis\\pa_pemvis\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{DB8DD3AE-B2DF-41DC-A962-C975B2EA0F3F}|PA_PEMVIS\\PA_PEMVIS.vbproj|solutionrelative:pa_pemvis\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 344,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.vb [Design]",
+              "DocumentMoniker": "D:\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\Form1.vb",
+              "RelativeDocumentMoniker": "PA_PEMVIS\\Form1.vb",
+              "ToolTip": "D:\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\Form1.vb [Design]",
+              "RelativeToolTip": "PA_PEMVIS\\Form1.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-05-12T11:35:00.983Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 56,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
