@@ -12,10 +12,12 @@
         If ValidasiLogin(id, pass) Then
             MessageBox.Show("Selamat Datang, " & CurrentNama & " (" & CurrentRole & ")", "Login Berhasil", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            ' Buka Form Utama (Form1)
-            Form1.Show()
+            If CurrentRole = "karyawan" Then
+                Form2.Show()
+            Else
+                Form1.Show()
+            End If
 
-            ' Sembunyikan Form Login agar tidak menutup aplikasi secara prematur
             Me.Hide()
         Else
             MessageBox.Show("Email/NIK atau Password salah!", "Gagal Login", MessageBoxButtons.OK, MessageBoxIcon.Error)

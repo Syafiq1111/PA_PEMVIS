@@ -1,7 +1,7 @@
 ﻿Imports MySqlConnector
 
 Module ConnectionModule
-    Public ReadOnly ConnectionString As String = "Server=localhost;Port=3306;Database=db_kantor;UserID=root;Password=;"
+    Public ReadOnly ConnectionString As String = "Server=localhost;Port=3306;Database=db_posttest_pemvis;UserID=root;Password=;"
 
     ' SESSION STATE GLOBAL
     ' Variabel-variabel ini bakalan menyimpan data pengguna yang berhasil login

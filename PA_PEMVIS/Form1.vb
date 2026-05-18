@@ -18,6 +18,7 @@
         txtEmail.Clear()
         mtbHP.Clear()
         txtPassword.Clear()
+        cbRole.SelectedIndex = -1
         ErrorProvider1.Clear()
     End Sub
 
@@ -29,6 +30,7 @@
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Inisialisasi ComboBox Role dengan pilihan
         TampilData()
         Kosong()
         TerapkanHakAksesUI()
@@ -41,6 +43,7 @@
             btnSimpan.Enabled = False   ' Tidak boleh mendaftarkan karyawan baru
             btnHapus.Enabled = False    ' Tidak boleh menghapus akun
             txtCari.Enabled = False     ' Tidak boleh mencari data karyawan lain
+            cbRole.Enabled = False      ' Tidak boleh mengubah role
 
             ' Muat data profil diri secara langsung ke kolom input text
             AmbilProfilMandiri()
@@ -50,6 +53,7 @@
             btnSimpan.Enabled = True
             btnHapus.Enabled = True
             txtCari.Enabled = True
+            cbRole.Enabled = True       ' Admin dapat memilih role
         End If
     End Sub
 
@@ -63,9 +67,9 @@
             mtbHP.Text = dt.Rows(0)("hp").ToString()
             txtPassword.Text = dt.Rows(0)("password").ToString()
 
-            ' --- ISI RUNTIME TEXTBOX ROLE ---
-            txtRole.Text = dt.Rows(0)("role").ToString()
-            txtRole.Enabled = False ' Kunci akses modifikasi langsung bagi karyawan
+            ' --- ISI RUNTIME COMBOBOX ROLE ---
+            cbRole.SelectedItem = dt.Rows(0)("role").ToString()
+            cbRole.Enabled = False ' Kunci akses modifikasi langsung bagi karyawan
         End If
     End Sub
 
@@ -73,7 +77,7 @@
     Private Sub btnSimpan_Click(sender As Object, e As EventArgs) Handles btnSimpan.Click
         ErrorProvider1.Clear()
 
-        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, txtRole) Then
+        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, cbRole) Then
             Exit Sub
         End If
 
@@ -82,7 +86,7 @@
         Dim email As String = txtEmail.Text.Trim()
         Dim hp As String = mtbHP.Text.Trim()
         Dim password As String = txtPassword.Text.Trim()
-        Dim role As String = txtRole.Text.Trim() ' Mengambil nilai role dari textbox input
+        Dim role As String = cbRole.SelectedItem.ToString().Trim() ' Mengambil nilai role dari combobox
 
         ' Deteksi redundansi data di database
         If nikSudahAda(nik) Then
@@ -109,7 +113,7 @@
     Private Sub btnUbah_Click(sender As Object, e As EventArgs) Handles btnUbah.Click
         ErrorProvider1.Clear()
 
-        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, txtRole) Then
+        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, cbRole) Then
             Exit Sub
         End If
 
@@ -120,7 +124,7 @@
         Dim password As String = txtPassword.Text.Trim()
 
         ' Penentuan Nilai Role (Aspek Proteksi Hak Akses)
-        Dim role As String = txtRole.Text.Trim().ToLower()
+        Dim role As String = cbRole.SelectedItem.ToString().Trim().ToLower()
 
         If CurrentRole = "karyawan" Then
             ' Karyawan dipaksa tetap menjadi karyawan 
@@ -193,10 +197,10 @@
             txtEmail.Text = dgvKaryawan.Rows(e.RowIndex).Cells("Email").Value.ToString()
             mtbHP.Text = dgvKaryawan.Rows(e.RowIndex).Cells("HP").Value.ToString()
 
-            ' Mengambil password secara aman langsung dari database untuk kebutuhan payload sinkronisasi input
             Dim dt As DataTable = getNIK(txtNIK.Text.Trim())
             If dt.Rows.Count > 0 Then
                 txtPassword.Text = dt.Rows(0)("password").ToString()
+                cbRole.SelectedItem = dt.Rows(0)("role").ToString()
             End If
         End If
     End Sub
@@ -221,11 +225,13 @@
                 txtEmail.Text = dt.Rows(0)("email").ToString()
                 mtbHP.Text = dt.Rows(0)("hp").ToString()
                 txtPassword.Text = dt.Rows(0)("password").ToString()
+                cbRole.SelectedItem = dt.Rows(0)("role").ToString()
             Else
                 txtNama.Clear()
                 txtEmail.Clear()
                 mtbHP.Clear()
                 txtPassword.Clear()
+                cbRole.SelectedIndex = -1
                 MessageBox.Show("Data tidak ditemukan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
             txtNIK.Focus()
@@ -256,5 +262,26 @@
     ' NAVIGASI KE INTERFACE MANAGEMEN TANGGUNGAN
     Private Sub btnForm2_Click(sender As Object, e As EventArgs) Handles btnForm2.Click
         Form2.Show()
+        Me.Hide()
+    End Sub
+
+    Private Sub LogoutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
+        ' Konfirmasi logout
+        Dim dialogResult As DialogResult = MessageBox.Show("Apakah Anda yakin ingin logout?", "Konfirmasi Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If dialogResult = DialogResult.Yes Then
+            ' Bersihkan sesi pengguna yang sedang aktif
+            ClearSession()
+
+            ' Bersihkan form data
+            Kosong()
+            ErrorProvider1.Clear()
+
+            ' Tampilkan kembali FormLogin
+            FormLogin.Show()
+
+            ' Tutup Form2
+            Me.Close()
+        End If
     End Sub
 End Class

@@ -7,7 +7,6 @@
         cbStatus.SelectedIndex = -1
         selectedId = 0
 
-        ' Penyesuaian State ComboBox NIK berdasarkan Hierarki Pengguna
         If CurrentRole = "karyawan" Then
             cbNik.SelectedValue = CurrentNIK
             cbNik.Enabled = False ' Kunci paksa kontrol input agar tidak memalsukan relasi karyawan lain
@@ -22,6 +21,12 @@
         LoadNik()
         TampilTanggungan()
         Kosong()
+        
+        If CurrentRole = "karyawan" Then
+            btnKaryawan.Visible = False
+        Else
+            btnKaryawan.Visible = True
+        End If
     End Sub
 
     ' REFRESH HUB SYNCHRONIZATION
@@ -153,5 +158,32 @@
     Private Sub Form2_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
         ' Jika ditutup, kembalikan fokus atau pastikan thread terlepas
         ErrorProvider1.Clear()
+    End Sub
+
+    Private Sub btnLogout_Click(sender As Object, e As EventArgs) Handles btnLogout.Click
+        ' Konfirmasi logout
+        Dim dialogResult As DialogResult = MessageBox.Show("Apakah Anda yakin ingin logout?", "Konfirmasi Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If dialogResult = DialogResult.Yes Then
+            ' Bersihkan sesi pengguna yang sedang aktif
+            ClearSession()
+
+            ' Bersihkan form data
+            Kosong()
+            ErrorProvider1.Clear()
+
+            ' Tampilkan kembali FormLogin
+            FormLogin.Show()
+
+            ' Tutup Form2
+            Me.Close()
+        End If
+    End Sub
+
+    Private Sub btnKaryawan_Click(sender As Object, e As EventArgs) Handles btnKaryawan.Click
+        If CurrentRole <> "karyawan" Then
+            Form1.Show()
+            Me.Hide()
+        End If
     End Sub
 End Class

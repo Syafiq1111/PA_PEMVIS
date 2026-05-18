@@ -38,14 +38,18 @@ Partial Class Form2
         btnUbah = New Button()
         txtCari = New TextBox()
         ErrorProvider1 = New ErrorProvider(components)
+        MenuStrip1 = New MenuStrip()
+        btnKaryawan = New ToolStripMenuItem()
+        btnLogout = New ToolStripMenuItem()
         CType(dgvTanggungan, ComponentModel.ISupportInitialize).BeginInit()
         CType(ErrorProvider1, ComponentModel.ISupportInitialize).BeginInit()
+        MenuStrip1.SuspendLayout()
         SuspendLayout()
         ' 
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(27, 26)
+        Label1.Location = New Point(27, 35)
         Label1.Name = "Label1"
         Label1.Size = New Size(26, 15)
         Label1.TabIndex = 0
@@ -54,7 +58,7 @@ Partial Class Form2
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(27, 60)
+        Label2.Location = New Point(27, 69)
         Label2.Name = "Label2"
         Label2.Size = New Size(39, 15)
         Label2.TabIndex = 1
@@ -63,7 +67,7 @@ Partial Class Form2
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Location = New Point(27, 93)
+        Label3.Location = New Point(27, 102)
         Label3.Name = "Label3"
         Label3.Size = New Size(64, 15)
         Label3.TabIndex = 2
@@ -72,7 +76,7 @@ Partial Class Form2
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Location = New Point(27, 124)
+        Label4.Location = New Point(27, 133)
         Label4.Name = "Label4"
         Label4.Size = New Size(39, 15)
         Label4.TabIndex = 3
@@ -81,7 +85,7 @@ Partial Class Form2
         ' cbNik
         ' 
         cbNik.FormattingEnabled = True
-        cbNik.Location = New Point(119, 23)
+        cbNik.Location = New Point(119, 32)
         cbNik.Name = "cbNik"
         cbNik.Size = New Size(336, 23)
         cbNik.TabIndex = 4
@@ -90,21 +94,21 @@ Partial Class Form2
         ' 
         cbStatus.FormattingEnabled = True
         cbStatus.Items.AddRange(New Object() {"Bekerja", "TIdak Bekerja", "Meninggal Dunia"})
-        cbStatus.Location = New Point(119, 124)
+        cbStatus.Location = New Point(119, 133)
         cbStatus.Name = "cbStatus"
         cbStatus.Size = New Size(178, 23)
         cbStatus.TabIndex = 5
         ' 
         ' txtNama
         ' 
-        txtNama.Location = New Point(119, 57)
+        txtNama.Location = New Point(119, 66)
         txtNama.Name = "txtNama"
         txtNama.Size = New Size(336, 23)
         txtNama.TabIndex = 6
         ' 
         ' txtHubungan
         ' 
-        txtHubungan.Location = New Point(119, 90)
+        txtHubungan.Location = New Point(119, 99)
         txtHubungan.Name = "txtHubungan"
         txtHubungan.Size = New Size(336, 23)
         txtHubungan.TabIndex = 7
@@ -119,7 +123,7 @@ Partial Class Form2
         ' 
         ' btnSimpan
         ' 
-        btnSimpan.Location = New Point(481, 20)
+        btnSimpan.Location = New Point(481, 29)
         btnSimpan.Margin = New Padding(3, 2, 3, 2)
         btnSimpan.Name = "btnSimpan"
         btnSimpan.Size = New Size(65, 26)
@@ -129,7 +133,7 @@ Partial Class Form2
         ' 
         ' btnBatal
         ' 
-        btnBatal.Location = New Point(481, 124)
+        btnBatal.Location = New Point(481, 133)
         btnBatal.Margin = New Padding(3, 2, 3, 2)
         btnBatal.Name = "btnBatal"
         btnBatal.Size = New Size(65, 26)
@@ -139,7 +143,7 @@ Partial Class Form2
         ' 
         ' btnHapus
         ' 
-        btnHapus.Location = New Point(481, 90)
+        btnHapus.Location = New Point(481, 99)
         btnHapus.Margin = New Padding(3, 2, 3, 2)
         btnHapus.Name = "btnHapus"
         btnHapus.Size = New Size(65, 26)
@@ -149,7 +153,7 @@ Partial Class Form2
         ' 
         ' btnUbah
         ' 
-        btnUbah.Location = New Point(481, 57)
+        btnUbah.Location = New Point(481, 66)
         btnUbah.Margin = New Padding(3, 2, 3, 2)
         btnUbah.Name = "btnUbah"
         btnUbah.Size = New Size(65, 26)
@@ -168,6 +172,27 @@ Partial Class Form2
         ' ErrorProvider1
         ' 
         ErrorProvider1.ContainerControl = Me
+        ' 
+        ' MenuStrip1
+        ' 
+        MenuStrip1.Items.AddRange(New ToolStripItem() {btnKaryawan, btnLogout})
+        MenuStrip1.Location = New Point(0, 0)
+        MenuStrip1.Name = "MenuStrip1"
+        MenuStrip1.Size = New Size(578, 24)
+        MenuStrip1.TabIndex = 24
+        MenuStrip1.Text = "MenuStrip1"
+        ' 
+        ' btnKaryawan
+        ' 
+        btnKaryawan.Name = "btnKaryawan"
+        btnKaryawan.Size = New Size(69, 20)
+        btnKaryawan.Text = "karyawan"
+        ' 
+        ' btnLogout
+        ' 
+        btnLogout.Name = "btnLogout"
+        btnLogout.Size = New Size(57, 20)
+        btnLogout.Text = "Logout"
         ' 
         ' Form2
         ' 
@@ -188,10 +213,14 @@ Partial Class Form2
         Controls.Add(Label3)
         Controls.Add(Label2)
         Controls.Add(Label1)
+        Controls.Add(MenuStrip1)
+        MainMenuStrip = MenuStrip1
         Name = "Form2"
         Text = "Form2"
         CType(dgvTanggungan, ComponentModel.ISupportInitialize).EndInit()
         CType(ErrorProvider1, ComponentModel.ISupportInitialize).EndInit()
+        MenuStrip1.ResumeLayout(False)
+        MenuStrip1.PerformLayout()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -211,4 +240,7 @@ Partial Class Form2
     Friend WithEvents btnUbah As Button
     Friend WithEvents txtCari As TextBox
     Friend WithEvents ErrorProvider1 As ErrorProvider
+    Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents btnLogout As ToolStripMenuItem
+    Friend WithEvents btnKaryawan As ToolStripMenuItem
 End Class
