@@ -34,13 +34,19 @@
         End If
     End Function
 
-    Public Function ValidasiKaryawan(ep As ErrorProvider, txtNIK As TextBox, txtNama As TextBox, txtEmail As TextBox, txtHP As MaskedTextBox) As Boolean
+    Public Function ValidasiKaryawan(ep As ErrorProvider, txtNIK As TextBox, txtNama As TextBox, txtEmail As TextBox, txtHP As MaskedTextBox, txtPassword As TextBox, txtRole As TextBox) As Boolean
 
         Dim nikValid As Boolean = ValidasiTextBox(ep, txtNIK, "NIK tidak boleh kosong")
         Dim namaValid As Boolean = ValidasiTextBox(ep, txtNama, "Nama tidak boleh kosong")
         Dim emailValid As Boolean = ValidasiTextBox(ep, txtEmail, "Email tidak boleh kosong")
         Dim hpValid As Boolean = ValidasiMaskedTextBox(ep, txtHP, "HP tidak boleh kosong")
-        Return nikValid And namaValid And emailValid And hpValid
+        Dim passValid As Boolean = ValidasiTextBox(ep, txtPassword, "Password tidak boleh kosong")
+
+        ' PENAMBAHAN VALIDASI UNTUK ROLE
+        Dim roleValid As Boolean = ValidasiTextBox(ep, txtRole, "Role tidak boleh kosong")
+
+        ' Semua kondisi harus bernilai True agar data dinyatakan valid
+        Return nikValid And namaValid And emailValid And hpValid And passValid And roleValid
     End Function
 
     Public Function IsEnterKey(e As KeyPressEventArgs) As Boolean

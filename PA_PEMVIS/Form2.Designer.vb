@@ -22,13 +22,14 @@ Partial Class Form2
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         Label1 = New Label()
         Label2 = New Label()
         Label3 = New Label()
         Label4 = New Label()
-        Me.cbNik = New ComboBox()
-        Me.cbStatus = New ComboBox()
-        Me.txtNama = New TextBox()
+        cbNik = New ComboBox()
+        cbStatus = New ComboBox()
+        txtNama = New TextBox()
         txtHubungan = New TextBox()
         dgvTanggungan = New DataGridView()
         btnSimpan = New Button()
@@ -36,7 +37,9 @@ Partial Class Form2
         btnHapus = New Button()
         btnUbah = New Button()
         txtCari = New TextBox()
+        ErrorProvider1 = New ErrorProvider(components)
         CType(dgvTanggungan, ComponentModel.ISupportInitialize).BeginInit()
+        CType(ErrorProvider1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' Label1
@@ -77,27 +80,27 @@ Partial Class Form2
         ' 
         ' cbNik
         ' 
-        Me.cbNik.FormattingEnabled = True
-        Me.cbNik.Location = New Point(119, 23)
-        Me.cbNik.Name = "cbNik"
-        Me.cbNik.Size = New Size(336, 23)
-        Me.cbNik.TabIndex = 4
+        cbNik.FormattingEnabled = True
+        cbNik.Location = New Point(119, 23)
+        cbNik.Name = "cbNik"
+        cbNik.Size = New Size(336, 23)
+        cbNik.TabIndex = 4
         ' 
         ' cbStatus
         ' 
-        Me.cbStatus.FormattingEnabled = True
-        Me.cbStatus.Items.AddRange(New Object() {"Bekerja", "TIdak Bekerja", "Meninggal Dunia"})
-        Me.cbStatus.Location = New Point(119, 124)
-        Me.cbStatus.Name = "cbStatus"
-        Me.cbStatus.Size = New Size(178, 23)
-        Me.cbStatus.TabIndex = 5
+        cbStatus.FormattingEnabled = True
+        cbStatus.Items.AddRange(New Object() {"Bekerja", "TIdak Bekerja", "Meninggal Dunia"})
+        cbStatus.Location = New Point(119, 124)
+        cbStatus.Name = "cbStatus"
+        cbStatus.Size = New Size(178, 23)
+        cbStatus.TabIndex = 5
         ' 
         ' txtNama
         ' 
-        Me.txtNama.Location = New Point(119, 57)
-        Me.txtNama.Name = "txtNama"
-        Me.txtNama.Size = New Size(336, 23)
-        Me.txtNama.TabIndex = 6
+        txtNama.Location = New Point(119, 57)
+        txtNama.Name = "txtNama"
+        txtNama.Size = New Size(336, 23)
+        txtNama.TabIndex = 6
         ' 
         ' txtHubungan
         ' 
@@ -162,9 +165,13 @@ Partial Class Form2
         txtCari.Size = New Size(519, 23)
         txtCari.TabIndex = 23
         ' 
+        ' ErrorProvider1
+        ' 
+        ErrorProvider1.ContainerControl = Me
+        ' 
         ' Form2
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(578, 411)
         Controls.Add(txtCari)
@@ -174,9 +181,9 @@ Partial Class Form2
         Controls.Add(btnSimpan)
         Controls.Add(dgvTanggungan)
         Controls.Add(txtHubungan)
-        Controls.Add(Me.txtNama)
-        Controls.Add(Me.cbStatus)
-        Controls.Add(Me.cbNik)
+        Controls.Add(txtNama)
+        Controls.Add(cbStatus)
+        Controls.Add(cbNik)
         Controls.Add(Label4)
         Controls.Add(Label3)
         Controls.Add(Label2)
@@ -184,6 +191,7 @@ Partial Class Form2
         Name = "Form2"
         Text = "Form2"
         CType(dgvTanggungan, ComponentModel.ISupportInitialize).EndInit()
+        CType(ErrorProvider1, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -202,4 +210,5 @@ Partial Class Form2
     Friend WithEvents btnHapus As Button
     Friend WithEvents btnUbah As Button
     Friend WithEvents txtCari As TextBox
+    Friend WithEvents ErrorProvider1 As ErrorProvider
 End Class

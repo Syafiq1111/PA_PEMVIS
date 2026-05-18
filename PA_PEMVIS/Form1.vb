@@ -1,138 +1,251 @@
 ﻿Public Class Form1
+    Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        ' Memaksa semua form tersembunyi (termasuk FormLogin) ikut hancur dan melepas memori
+        Application.Exit()
+    End Sub
+
     Private Sub Kosong()
         txtNama.Clear()
-        txtNIK.Clear()
+        ' Jika user adalah karyawan, NIK tidak boleh dibersihkan/diubah karena mutlak milik dirinya
+        If CurrentRole <> "karyawan" Then
+            txtNIK.Clear()
+            txtNIK.Enabled = True
+        Else
+            txtNIK.Text = CurrentNIK
+            txtNIK.Enabled = False
+        End If
+
         txtEmail.Clear()
         mtbHP.Clear()
+        txtPassword.Clear()
         ErrorProvider1.Clear()
     End Sub
 
+    ' MENAMPILKAN DATA KE DATA GRID VIEW
     Private Sub TampilData()
+        ' Fungsi getAllKaryawan() di DataModule otomatis menyaring kembalian DataTable 
+        ' berdasarkan state global CurrentRole & CurrentNIK yang aktif
         dgvKaryawan.DataSource = getAllKaryawan()
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         TampilData()
         Kosong()
+        TerapkanHakAksesUI()
     End Sub
 
+    ' OTORISASI BERDASARKAN ROLE
+    Private Sub TerapkanHakAksesUI()
+        If CurrentRole = "karyawan" Then
+            ' Proteksi Struktural Karyawan
+            btnSimpan.Enabled = False   ' Tidak boleh mendaftarkan karyawan baru
+            btnHapus.Enabled = False    ' Tidak boleh menghapus akun
+            txtCari.Enabled = False     ' Tidak boleh mencari data karyawan lain
+
+            ' Muat data profil diri secara langsung ke kolom input text
+            AmbilProfilMandiri()
+        ElseIf CurrentRole = "admin" Then
+            ' Akses Penuh Admin
+            txtNIK.Enabled = True
+            btnSimpan.Enabled = True
+            btnHapus.Enabled = True
+            txtCari.Enabled = True
+        End If
+    End Sub
+
+    ' METODE PENGAMBILAN DATA PROFIL MANDIRI KARYAWAN
+    Private Sub AmbilProfilMandiri()
+        Dim dt As DataTable = getNIK(CurrentNIK)
+        If dt.Rows.Count > 0 Then
+            txtNIK.Text = dt.Rows(0)("nik").ToString()
+            txtNama.Text = dt.Rows(0)("nama").ToString()
+            txtEmail.Text = dt.Rows(0)("email").ToString()
+            mtbHP.Text = dt.Rows(0)("hp").ToString()
+            txtPassword.Text = dt.Rows(0)("password").ToString()
+
+            ' --- ISI RUNTIME TEXTBOX ROLE ---
+            txtRole.Text = dt.Rows(0)("role").ToString()
+            txtRole.Enabled = False ' Kunci akses modifikasi langsung bagi karyawan
+        End If
+    End Sub
+
+    ' LOGIKA TAMBAH DATA (CREATE)
     Private Sub btnSimpan_Click(sender As Object, e As EventArgs) Handles btnSimpan.Click
         ErrorProvider1.Clear()
-        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP) Then Exit Sub
+
+        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, txtRole) Then
+            Exit Sub
+        End If
 
         Dim nik As String = txtNIK.Text.Trim()
         Dim nama As String = txtNama.Text.Trim()
         Dim email As String = txtEmail.Text.Trim()
         Dim hp As String = mtbHP.Text.Trim()
+        Dim password As String = txtPassword.Text.Trim()
+        Dim role As String = txtRole.Text.Trim() ' Mengambil nilai role dari textbox input
 
-        If (nikSudahAda(nik)) Then
-            MessageBox.Show("NIK sudah ada, silakan gunakan NIK lain.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        ' Deteksi redundansi data di database
+        If nikSudahAda(nik) Then
+            MessageBox.Show("NIK sudah terdaftar di sistem, gunakan NIK lain.", "Peringatan Keamanan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             txtNIK.Focus()
             Return
         End If
 
-        If (emailSudahAda(email)) Then
-            MessageBox.Show("Email sudah ada, silakan gunakan email lain.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        If emailSudahAda(email) Then
+            MessageBox.Show("Email sudah digunakan, gunakan alamat email lain.", "Peringatan Keamanan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             txtEmail.Focus()
             Return
         End If
 
-        If simpanKaraywan(nik, nama, email, hp) Then
-            MessageBox.Show("Data berhasil disimpan", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        ' Eksekusi penulisan record baru ke database
+        If simpanKaryawan(nik, nama, email, hp, password, role) Then
+            MessageBox.Show("Data karyawan berhasil disimpan ke database.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             TampilData()
             Kosong()
         End If
     End Sub
 
+    ' LOGIKA UBAH DATA (UPDATE)
     Private Sub btnUbah_Click(sender As Object, e As EventArgs) Handles btnUbah.Click
-
         ErrorProvider1.Clear()
-        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP) Then Exit Sub
+
+        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, txtRole) Then
+            Exit Sub
+        End If
 
         Dim nik As String = txtNIK.Text.Trim()
         Dim nama As String = txtNama.Text.Trim()
         Dim email As String = txtEmail.Text.Trim()
         Dim hp As String = mtbHP.Text.Trim()
+        Dim password As String = txtPassword.Text.Trim()
 
-        If ubahKaryawan(nik, nama, email, hp) Then
-            MessageBox.Show("Data berhasil diubah", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        ' Penentuan Nilai Role (Aspek Proteksi Hak Akses)
+        Dim role As String = txtRole.Text.Trim().ToLower()
+
+        If CurrentRole = "karyawan" Then
+            ' Karyawan dipaksa tetap menjadi karyawan 
+            ' untuk mencegah manipulasi teks via inspeksi runtime UI
+            role = "karyawan"
+        End If
+
+        ' 3. Eksekusi pembaruan data ke database
+        If ubahKaryawan(nik, nama, email, hp, password, role) Then
+            MessageBox.Show("Data diri Anda berhasil diperbarui!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' Refresh komponen tabel DataGridView
             TampilData()
-            Kosong()
-        Else
-            MessageBox.Show("Data tidak ditemukan", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
 
+            ' Jika pengguna adalah karyawan, kunci kembali profilnya di form input
+            If CurrentRole = "karyawan" Then
+                AmbilProfilMandiri()
+            Else
+                Kosong()
+            End If
+        Else
+            MessageBox.Show("Gagal memperbarui data diri. Pastikan format input benar.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
 
+    ' LOGIKA HAPUS DATA (DELETE)
     Private Sub btnHapus_Click(sender As Object, e As EventArgs) Handles btnHapus.Click
+        ' Gerbang Otorisasi Tingkat Aksi
+        If CurrentRole = "karyawan" Then
+            MessageBox.Show("Akses Ditolak: Karyawan dilarang menghapus akun mandiri/orang lain.", "Pelanggaran Hak Akses", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
 
         If txtNIK.Text.Trim() = "" Then
-            MessageBox.Show("Pilih data yang akan dihapus",
-            "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Pilih record data karyawan pada tabel terlebih dahulu.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             txtNIK.Focus()
             Exit Sub
         End If
-        Dim hasil As DialogResult
-        hasil = MessageBox.Show("Apakah data ingin dihapus?",
-        "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        Dim hasil As DialogResult = MessageBox.Show("Menghapus data karyawan akan menghapus seluruh data tanggungannya secara permanen (CASCADE). Apakah Anda yakin?", "Konfirmasi Penghapusan", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
         If hasil = DialogResult.Yes Then
             If hapusKaryawan(txtNIK.Text.Trim()) Then
-                MessageBox.Show("Data berhasil dihapus", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show("Data karyawan terhapus dengan sukses.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 TampilData()
                 Kosong()
-                If Form2.Visible Then
-                    Form2.RefreshDataTanggungan()
-                End If
+                If Form2.Visible Then Form2.RefreshDataTanggungan()
             End If
         End If
     End Sub
 
+    ' PEMBATALAN DAN RESET FORM
     Private Sub btnBatal_Click(sender As Object, e As EventArgs) Handles btnBatal.Click
         Kosong()
         TampilData()
+        TerapkanHakAksesUI()
     End Sub
 
+    ' DATA BINDING GRID VIEW KE INPUT FIELD
     Private Sub dgvKaryawan_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvKaryawan.CellClick
-
         If e.RowIndex >= 0 Then
+            ' Jika user adalah karyawan, hindari proses select dari gridview baris lain jika ada keganjilan data runtime
+            If CurrentRole = "karyawan" AndAlso dgvKaryawan.Rows(e.RowIndex).Cells("NIK").Value.ToString() <> CurrentNIK Then
+                MessageBox.Show("Anda tidak diizinkan mengakses data profile karyawan lain.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+
             txtNIK.Text = dgvKaryawan.Rows(e.RowIndex).Cells("NIK").Value.ToString()
             txtNama.Text = dgvKaryawan.Rows(e.RowIndex).Cells("Nama").Value.ToString()
             txtEmail.Text = dgvKaryawan.Rows(e.RowIndex).Cells("Email").Value.ToString()
             mtbHP.Text = dgvKaryawan.Rows(e.RowIndex).Cells("HP").Value.ToString()
+
+            ' Mengambil password secara aman langsung dari database untuk kebutuhan payload sinkronisasi input
+            Dim dt As DataTable = getNIK(txtNIK.Text.Trim())
+            If dt.Rows.Count > 0 Then
+                txtPassword.Text = dt.Rows(0)("password").ToString()
+            End If
         End If
     End Sub
 
+    ' AKSES NAVIGASI KEYBOARD NIK PRESS ENTER
     Private Sub txtNIK_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtNIK.KeyPress
-
         If IsEnterKey(e) Then
             e.Handled = True
-            Dim dt As DataTable =
-            getNIK(txtNIK.Text.Trim())
+
+            ' Batasi pencarian pencocokan NIK jika user adalah karyawan biasa
+            If CurrentRole = "karyawan" AndAlso txtNIK.Text.Trim() <> CurrentNIK Then
+                MessageBox.Show("Anda hanya dapat memuat profil data diri Anda sendiri.", "Batasan Hak Akses", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                AmbilProfilMandiri()
+                Exit Sub
+            End If
+
+            Dim dt As DataTable = getNIK(txtNIK.Text.Trim())
 
             If dt.Rows.Count > 0 Then
-                txtNIK.Text =
-                dt.Rows(0)("NIK").ToString()
-
-                txtNama.Text = dt.Rows(0)("Nama").ToString()
-                txtEmail.Text = dt.Rows(0)("Email").ToString()
-                mtbHP.Text = dt.Rows(0)("HP").ToString()
+                txtNIK.Text = dt.Rows(0)("nik").ToString()
+                txtNama.Text = dt.Rows(0)("nama").ToString()
+                txtEmail.Text = dt.Rows(0)("email").ToString()
+                mtbHP.Text = dt.Rows(0)("hp").ToString()
+                txtPassword.Text = dt.Rows(0)("password").ToString()
             Else
                 txtNama.Clear()
                 txtEmail.Clear()
                 mtbHP.Clear()
+                txtPassword.Clear()
+                MessageBox.Show("Data tidak ditemukan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
             txtNIK.Focus()
         End If
     End Sub
 
+    ' VALIDASI HURUF
     Private Sub txtNama_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtNama.KeyPress
         HanyaHuruf(e)
         If IsEnterKey(e) Then
             e.Handled = True
-            btnSimpan.Focus()
+            btnUbah.Focus()
         End If
     End Sub
+
+    ' PENCARIAN LIVE-SEARCH TEXTBOX
     Private Sub txtCari_TextChanged(sender As Object, e As EventArgs) Handles txtCari.TextChanged
+        ' Jika karyawan mencoba menjebol bypass melalui input runtime text pencarian, paksa hentikan.
+        If CurrentRole = "karyawan" Then Exit Sub
+
         If txtCari.Text.Trim() = "" Then
             TampilData()
         Else
@@ -140,6 +253,7 @@
         End If
     End Sub
 
+    ' NAVIGASI KE INTERFACE MANAGEMEN TANGGUNGAN
     Private Sub btnForm2_Click(sender As Object, e As EventArgs) Handles btnForm2.Click
         Form2.Show()
     End Sub

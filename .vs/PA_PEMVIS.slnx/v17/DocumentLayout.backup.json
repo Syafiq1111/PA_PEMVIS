@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\PA_PEMVIS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{649E4CB3-035F-702C-D73D-DCB7DFB2FD6D}|PA_PEMVIS\\PA_PEMVIS.vbproj|d:\\pa_pemvis\\pa_pemvis\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{649E4CB3-035F-702C-D73D-DCB7DFB2FD6D}|PA_PEMVIS\\PA_PEMVIS.vbproj|solutionrelative:pa_pemvis\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{649E4CB3-035F-702C-D73D-DCB7DFB2FD6D}|PA_PEMVIS\\PA_PEMVIS.vbproj|d:\\pa_pemvis\\pa_pemvis\\form2.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{649E4CB3-035F-702C-D73D-DCB7DFB2FD6D}|PA_PEMVIS\\PA_PEMVIS.vbproj|solutionrelative:pa_pemvis\\form2.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form2.vb [Design]",
+              "DocumentMoniker": "D:\\PA_PEMVIS\\PA_PEMVIS\\Form2.vb",
+              "RelativeDocumentMoniker": "PA_PEMVIS\\Form2.vb",
+              "ToolTip": "D:\\PA_PEMVIS\\PA_PEMVIS\\Form2.vb [Design]",
+              "RelativeToolTip": "PA_PEMVIS\\Form2.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-05-17T09:01:02.083Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.vb [Design]",
+              "DocumentMoniker": "D:\\PA_PEMVIS\\PA_PEMVIS\\Form1.vb",
+              "RelativeDocumentMoniker": "PA_PEMVIS\\Form1.vb",
+              "ToolTip": "D:\\PA_PEMVIS\\PA_PEMVIS\\Form1.vb [Design]",
+              "RelativeToolTip": "PA_PEMVIS\\Form1.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-05-17T08:59:54.4Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

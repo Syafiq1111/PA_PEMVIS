@@ -1,38 +1,84 @@
 ﻿Imports MySqlConnector
 
 Module DataModule
+    Public Function ValidasiLogin(identifier As String, password As String) As Boolean
+        Dim query As String = "SELECT nik, nama, role FROM karyawan WHERE (email = @id OR nik = @id) AND password = @password"
+
+        Using conn As MySqlConnection = GetConnection()
+            Using cmd As New MySqlCommand(query, conn)
+                cmd.Parameters.AddWithValue("@id", identifier)
+                cmd.Parameters.AddWithValue("@password", password)
+
+                Try
+                    conn.Open()
+                    Using reader As MySqlDataReader = cmd.ExecuteReader()
+                        If reader.Read() Then
+                            CurrentNIK = reader("nik").ToString()
+                            CurrentNama = reader("nama").ToString()
+                            CurrentRole = reader("role").ToString()
+                            Return True
+                        End If
+                    End Using
+                Catch ex As Exception
+                    MsgBox("Kesalahan Database: " & ex.Message, MsgBoxStyle.Critical, "Error")
+                End Try
+            End Using
+        End Using
+        Return False
+    End Function
+
     Public Function getAllKaryawan() As DataTable
         Dim dt As New DataTable()
-        Try
-            Dim query As String = "SELECT * FROM karyawan"
+        Dim query As String = ""
 
-            Using conn As MySqlConnection = GetConnection()
-                Using da As New MySqlDataAdapter(query, conn)
-                    da.Fill(dt)
-                End Using
+        If CurrentRole = "admin" Then
+            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, role AS Role FROM karyawan"
+        Else
+            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, role AS Role FROM karyawan WHERE nik = @nik"
+        End If
+
+        Using conn As MySqlConnection = GetConnection()
+            Using cmd As New MySqlCommand(query, conn)
+                If CurrentRole <> "admin" Then
+                    cmd.Parameters.AddWithValue("@nik", CurrentNIK)
+                End If
+
+                Try
+                    Using adapter As New MySqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+                Catch ex As Exception
+                    MsgBox("Gagal memuat data karyawan: " & ex.Message, MsgBoxStyle.Critical, "Eror Database")
+                End Try
             End Using
-        Catch ex As Exception
-            MessageBox.Show("Gagal menampilkan data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
-        End Try
+        End Using
         Return dt
     End Function
+
     Public Function SearchKaryawan(keyword As String) As DataTable
         Dim dt As New DataTable()
-        Try
-            Dim query As String =
-            "SELECT * FROM karyawan " & "WHERE nama LIKE @keyword OR nik LIKE @keyword " & "ORDER BY nama ASC"
-            Using conn As MySqlConnection = GetConnection()
-                Using da As New MySqlDataAdapter(query, conn)
-                    da.SelectCommand.Parameters.AddWithValue("@keyword", "%" & keyword &
-                    "%")
+        Dim query As String = ""
 
-                    da.Fill(dt)
+        If CurrentRole = "admin" Then
+            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, role AS Role FROM karyawan WHERE nama LIKE @keyword OR nik LIKE @keyword ORDER BY nama ASC"
+        Else
+            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, role AS Role FROM karyawan WHERE (nik = @nik) AND (nama LIKE @keyword OR nik LIKE @keyword) ORDER BY nama ASC"
+        End If
+
+        Try
+            Using conn As MySqlConnection = GetConnection()
+                Using cmd As New MySqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@keyword", "%" & keyword & "%")
+                    If CurrentRole <> "admin" Then
+                        cmd.Parameters.AddWithValue("@nik", CurrentNIK)
+                    End If
+                    Using adapter As New MySqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
                 End Using
             End Using
         Catch ex As Exception
             MessageBox.Show("Gagal mencari data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
         End Try
         Return dt
     End Function
@@ -41,17 +87,14 @@ Module DataModule
         Dim dt As New DataTable()
         Try
             Dim query As String = "SELECT * FROM karyawan WHERE nik = @nik"
-
             Using conn As MySqlConnection = GetConnection()
                 Using da As New MySqlDataAdapter(query, conn)
                     da.SelectCommand.Parameters.AddWithValue("@nik", nik)
                     da.Fill(dt)
                 End Using
             End Using
-
         Catch ex As Exception
             MessageBox.Show("Gagal mencari data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
         End Try
         Return dt
     End Function
@@ -59,46 +102,40 @@ Module DataModule
     Public Function nikSudahAda(nik As String) As Boolean
         Try
             Dim query As String = "SELECT COUNT(*) FROM karyawan WHERE nik = @nik"
-
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
                 Using cmd As New MySqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@nik", nik)
-                    Dim jumlah As Integer =
-                    Convert.ToInt32(cmd.ExecuteScalar())
+                    Dim jumlah As Integer = Convert.ToInt32(cmd.ExecuteScalar())
                     Return jumlah > 0
                 End Using
             End Using
         Catch ex As Exception
             MessageBox.Show("Gagal memeriksa data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
             Return True
         End Try
     End Function
+
     Public Function emailSudahAda(email As String) As Boolean
         Try
             Dim query As String = "SELECT COUNT(*) FROM karyawan WHERE email = @email"
-
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
                 Using cmd As New MySqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@email", email)
-                    Dim jumlah As Integer =
-                    Convert.ToInt32(cmd.ExecuteScalar())
+                    Dim jumlah As Integer = Convert.ToInt32(cmd.ExecuteScalar())
                     Return jumlah > 0
                 End Using
             End Using
         Catch ex As Exception
             MessageBox.Show("Gagal memeriksa data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
             Return True
         End Try
     End Function
 
-    Public Function simpanKaraywan(nik As String, nama As String, email As String, hp As String) As Boolean
+    Public Function simpanKaryawan(nik As String, nama As String, email As String, hp As String, password As String, role As String) As Boolean
         Try
-            Dim query As String = "INSERT INTO karyawan (nik, nama, email, hp) VALUES (@nik, @nama, @email, @hp)"
-
+            Dim query As String = "INSERT INTO karyawan (nik, nama, email, hp, password, role) VALUES (@nik, @nama, @email, @hp, @password, @role)"
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
                 Using cmd As New MySqlCommand(query, conn)
@@ -106,6 +143,8 @@ Module DataModule
                     cmd.Parameters.AddWithValue("@nama", nama)
                     cmd.Parameters.AddWithValue("@email", email)
                     cmd.Parameters.AddWithValue("@hp", hp)
+                    cmd.Parameters.AddWithValue("@password", password)
+                    cmd.Parameters.AddWithValue("@role", role)
                     cmd.ExecuteNonQuery()
                 End Using
             End Using
@@ -116,24 +155,26 @@ Module DataModule
         End Try
     End Function
 
-    Public Function ubahKaryawan(nik As String, nama As String, email As String, hp As String) As Boolean
-        Try
-            Dim query As String = "UPDATE karyawan SET nama = @nama, email = @email, hp = @hp WHERE nik = @nik"
-
-            Using conn As MySqlConnection = GetConnection()
-                conn.Open()
-                Using cmd As New MySqlCommand(query, conn)
-                    cmd.Parameters.AddWithValue("@nik", nik)
-                    cmd.Parameters.AddWithValue("@nama", nama)
-                    cmd.Parameters.AddWithValue("@email", email)
-                    cmd.Parameters.AddWithValue("@hp", hp)
-                    Return cmd.ExecuteNonQuery() > 0
-                End Using
+    Public Function ubahKaryawan(nik As String, nama As String, email As String, hp As String, password As String, role As String) As Boolean
+        Dim query As String = "UPDATE karyawan SET nama = @nama, email = @email, hp = @hp, password = @password, role = @role WHERE nik = @nik"
+        Using conn As MySqlConnection = GetConnection()
+            Using cmd As New MySqlCommand(query, conn)
+                cmd.Parameters.AddWithValue("@nik", nik)
+                cmd.Parameters.AddWithValue("@nama", nama)
+                cmd.Parameters.AddWithValue("@email", email)
+                cmd.Parameters.AddWithValue("@hp", hp)
+                cmd.Parameters.AddWithValue("@password", password)
+                cmd.Parameters.AddWithValue("@role", role)
+                Try
+                    conn.Open()
+                    Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
+                    Return rowsAffected > 0
+                Catch ex As Exception
+                    MsgBox("Gagal memperbarui data di database: " & ex.Message, MsgBoxStyle.Critical, "Eror Update")
+                    Return False
+                End Try
             End Using
-        Catch ex As Exception
-            MessageBox.Show("Gagal mengubah data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return False
-        End Try
+        End Using
     End Function
 
     Public Function hapusKaryawan(nik As String) As Boolean
@@ -148,15 +189,16 @@ Module DataModule
             End Using
         Catch ex As Exception
             MessageBox.Show("Gagal menghapus data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
             Return False
         End Try
     End Function
 
+    ' --- SINKRONISASI MANAJEMEN CRUD TANGGUNGAN BERBASIS ATURAN USER ---
+
     Public Function getAllTanggungan(nik As String) As DataTable
         Dim dt As New DataTable()
         Try
-            Dim query As String = "SELECT * FROM tanggungan WHERE nik_karyawan = @nik"
+            Dim query As String = "SELECT id_tanggungan, nik_karyawan, nama, hubungan, status FROM tanggungan WHERE nik_karyawan = @nik"
             Using conn As MySqlConnection = GetConnection()
                 Using da As New MySqlDataAdapter(query, conn)
                     da.SelectCommand.Parameters.AddWithValue("@nik", nik)
@@ -172,7 +214,7 @@ Module DataModule
     Public Function getAllTanggunganData() As DataTable
         Dim dt As New DataTable()
         Try
-            Dim query As String = "SELECT * FROM tanggungan"
+            Dim query As String = "SELECT id_tanggungan, nik_karyawan, nama, hubungan, status FROM tanggungan"
             Using conn As MySqlConnection = GetConnection()
                 Using da As New MySqlDataAdapter(query, conn)
                     da.Fill(dt)
@@ -186,11 +228,22 @@ Module DataModule
 
     Public Function SearchTanggungan(keyword As String) As DataTable
         Dim dt As New DataTable()
+        Dim query As String = ""
+
+        ' Jika karyawan mencari, batasi cakupan pencarian hanya pada tanggungannya sendiri
+        If CurrentRole = "admin" Then
+            query = "SELECT id_tanggungan, nik_karyawan, nama, hubungan, status FROM tanggungan WHERE nama LIKE @keyword OR hubungan LIKE @keyword OR status LIKE @keyword OR nik_karyawan LIKE @keyword"
+        Else
+            query = "SELECT id_tanggungan, nik_karyawan, nama, hubungan, status FROM tanggungan WHERE nik_karyawan = @nik AND (nama LIKE @keyword OR hubungan LIKE @keyword OR status LIKE @keyword)"
+        End If
+
         Try
-            Dim query As String = "SELECT * FROM tanggungan WHERE nama LIKE @keyword OR hubungan LIKE @keyword OR status LIKE @keyword OR nik_karyawan LIKE @keyword"
             Using conn As MySqlConnection = GetConnection()
                 Using da As New MySqlDataAdapter(query, conn)
                     da.SelectCommand.Parameters.AddWithValue("@keyword", "%" & keyword & "%")
+                    If CurrentRole <> "admin" Then
+                        da.SelectCommand.Parameters.AddWithValue("@nik", CurrentNIK)
+                    End If
                     da.Fill(dt)
                 End Using
             End Using
@@ -222,7 +275,14 @@ Module DataModule
 
     Public Function ubahTanggungan(id As Integer, nik_karyawan As String, nama As String, hubungan As String, status As String) As Boolean
         Try
-            Dim query As String = "UPDATE tanggungan SET nik_karyawan = @nik, nama = @nama, hubungan = @hubungan, status = @status WHERE id_tanggungan = @id"
+            Dim query As String = ""
+            ' Keamanan Server-Side (Anti-IDOR Injection)
+            If CurrentRole = "admin" Then
+                query = "UPDATE tanggungan SET nik_karyawan = @nik, nama = @nama, hubungan = @hubungan, status = @status WHERE id_tanggungan = @id"
+            Else
+                query = "UPDATE tanggungan SET nama = @nama, hubungan = @hubungan, status = @status WHERE id_tanggungan = @id AND nik_karyawan = @nik"
+            End If
+
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
                 Using cmd As New MySqlCommand(query, conn)
@@ -242,11 +302,20 @@ Module DataModule
 
     Public Function hapusTanggungan(id As Integer) As Boolean
         Try
-            Dim query As String = "DELETE FROM tanggungan WHERE id_tanggungan = @id"
+            Dim query As String = ""
+            If CurrentRole = "admin" Then
+                query = "DELETE FROM tanggungan WHERE id_tanggungan = @id"
+            Else
+                query = "DELETE FROM tanggungan WHERE id_tanggungan = @id AND nik_karyawan = @nik"
+            End If
+
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
                 Using cmd As New MySqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@id", id)
+                    If CurrentRole <> "admin" Then
+                        cmd.Parameters.AddWithValue("@nik", CurrentNIK)
+                    End If
                     Return cmd.ExecuteNonQuery() > 0
                 End Using
             End Using
