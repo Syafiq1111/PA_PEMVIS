@@ -8,7 +8,6 @@
             Exit Sub
         End If
 
-        ' Memanggil fungsi dari ConnectionModule untuk validasi login
         If ValidasiLogin(id, pass) Then
             MessageBox.Show("Selamat Datang, " & CurrentNama & " (" & CurrentRole & ")", "Login Berhasil", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
@@ -27,7 +26,10 @@
     End Sub
 
     Private Sub FormLogin_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
-        ' Memastikan seluruh thread aplikasi berhenti saat form login ditutup
         Application.Exit()
+    End Sub
+
+    Private Sub FormLogin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
     End Sub
 End Class

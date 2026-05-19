@@ -32,9 +32,9 @@ Module DataModule
         Dim query As String = ""
 
         If CurrentRole = "admin" Then
-            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, role AS Role FROM karyawan"
+            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, gaji AS Gaji, role AS Role FROM karyawan"
         Else
-            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, role AS Role FROM karyawan WHERE nik = @nik"
+            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, gaji AS Gaji, role AS Role FROM karyawan WHERE nik = @nik"
         End If
 
         Using conn As MySqlConnection = GetConnection()
@@ -60,9 +60,9 @@ Module DataModule
         Dim query As String = ""
 
         If CurrentRole = "admin" Then
-            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, role AS Role FROM karyawan WHERE nama LIKE @keyword OR nik LIKE @keyword ORDER BY nama ASC"
+            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, gaji AS Gaji, role AS Role FROM karyawan WHERE nama LIKE @keyword OR nik LIKE @keyword ORDER BY nama ASC"
         Else
-            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, role AS Role FROM karyawan WHERE (nik = @nik) AND (nama LIKE @keyword OR nik LIKE @keyword) ORDER BY nama ASC"
+            query = "SELECT nik AS NIK, nama AS Nama, email AS Email, hp AS HP, gaji AS Gaji, role AS Role FROM karyawan WHERE (nik = @nik) AND (nama LIKE @keyword OR nik LIKE @keyword) ORDER BY nama ASC"
         End If
 
         Try
@@ -133,9 +133,9 @@ Module DataModule
         End Try
     End Function
 
-    Public Function simpanKaryawan(nik As String, nama As String, email As String, hp As String, password As String, role As String) As Boolean
+    Public Function simpanKaryawan(nik As String, nama As String, email As String, hp As String, gaji As Integer, password As String, role As String) As Boolean
         Try
-            Dim query As String = "INSERT INTO karyawan (nik, nama, email, hp, password, role) VALUES (@nik, @nama, @email, @hp, @password, @role)"
+            Dim query As String = "INSERT INTO karyawan (nik, nama, email, hp, gaji, password, role) VALUES (@nik, @nama, @email, @hp, @gaji, @password, @role)"
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
                 Using cmd As New MySqlCommand(query, conn)
@@ -143,6 +143,7 @@ Module DataModule
                     cmd.Parameters.AddWithValue("@nama", nama)
                     cmd.Parameters.AddWithValue("@email", email)
                     cmd.Parameters.AddWithValue("@hp", hp)
+                    cmd.Parameters.AddWithValue("@gaji", gaji)
                     cmd.Parameters.AddWithValue("@password", password)
                     cmd.Parameters.AddWithValue("@role", role)
                     cmd.ExecuteNonQuery()
@@ -155,14 +156,16 @@ Module DataModule
         End Try
     End Function
 
-    Public Function ubahKaryawan(nik As String, nama As String, email As String, hp As String, password As String, role As String) As Boolean
-        Dim query As String = "UPDATE karyawan SET nama = @nama, email = @email, hp = @hp, password = @password, role = @role WHERE nik = @nik"
+    Public Function ubahKaryawan(nik As String, nama As String, email As String, hp As String, gaji As Integer, password As String, role As String) As Boolean
+        Dim query As String = "UPDATE karyawan SET nama = @nama, email = @email, hp = @hp, gaji = @gaji, password = @password, role = @role WHERE nik = @nik"
         Using conn As MySqlConnection = GetConnection()
             Using cmd As New MySqlCommand(query, conn)
                 cmd.Parameters.AddWithValue("@nik", nik)
                 cmd.Parameters.AddWithValue("@nama", nama)
                 cmd.Parameters.AddWithValue("@email", email)
                 cmd.Parameters.AddWithValue("@hp", hp)
+                cmd.Parameters.AddWithValue("@gaji", gaji)
+
                 cmd.Parameters.AddWithValue("@password", password)
                 cmd.Parameters.AddWithValue("@role", role)
                 Try

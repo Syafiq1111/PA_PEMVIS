@@ -17,60 +17,76 @@ Partial Class FormLogin
 
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.lblIdentifier = New System.Windows.Forms.Label()
-        Me.txtIdentifier = New System.Windows.Forms.TextBox()
-        Me.lblPassword = New System.Windows.Forms.Label()
-        Me.txtPassword = New System.Windows.Forms.TextBox()
-        Me.btnLogin = New System.Windows.Forms.Button()
-        Me.SuspendLayout()
-
-        Me.lblIdentifier.AutoSize = True
-        Me.lblIdentifier.Location = New System.Drawing.Point(30, 30)
-        Me.lblIdentifier.Name = "lblIdentifier"
-        Me.lblIdentifier.Size = New System.Drawing.Size(64, 15)
-        Me.lblIdentifier.TabIndex = 0
-        Me.lblIdentifier.Text = "NIK / Email"
-
-        Me.txtIdentifier.Location = New System.Drawing.Point(30, 50)
-        Me.txtIdentifier.Name = "txtIdentifier"
-        Me.txtIdentifier.Size = New System.Drawing.Size(220, 23)
-        Me.txtIdentifier.TabIndex = 1
-
-        Me.lblPassword.AutoSize = True
-        Me.lblPassword.Location = New System.Drawing.Point(30, 90)
-        Me.lblPassword.Name = "lblPassword"
-        Me.lblPassword.Size = New System.Drawing.Size(57, 15)
-        Me.lblPassword.TabIndex = 2
-        Me.lblPassword.Text = "Password"
-
-        Me.txtPassword.Location = New System.Drawing.Point(30, 110)
-        Me.txtPassword.Name = "txtPassword"
-        Me.txtPassword.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtPassword.Size = New System.Drawing.Size(220, 23)
-        Me.txtPassword.TabIndex = 3
-
-        Me.btnLogin.Location = New System.Drawing.Point(30, 160)
-        Me.btnLogin.Name = "btnLogin"
-        Me.btnLogin.Size = New System.Drawing.Size(220, 30)
-        Me.btnLogin.TabIndex = 4
-        Me.btnLogin.Text = "Login"
-        Me.btnLogin.UseVisualStyleBackColor = True
-
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 231)
-        Me.Controls.Add(Me.btnLogin)
-        Me.Controls.Add(Me.txtPassword)
-        Me.Controls.Add(Me.lblPassword)
-        Me.Controls.Add(Me.txtIdentifier)
-        Me.Controls.Add(Me.lblIdentifier)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
-        Me.MaximizeBox = False
-        Me.Name = "FormLogin"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Form Login"
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        lblIdentifier = New Label()
+        txtIdentifier = New TextBox()
+        lblPassword = New Label()
+        txtPassword = New TextBox()
+        btnLogin = New Button()
+        SuspendLayout()
+        ' 
+        ' lblIdentifier
+        ' 
+        lblIdentifier.AutoSize = True
+        lblIdentifier.Location = New Point(34, 40)
+        lblIdentifier.Name = "lblIdentifier"
+        lblIdentifier.Size = New Size(84, 20)
+        lblIdentifier.TabIndex = 0
+        lblIdentifier.Text = "NIK / Email"
+        ' 
+        ' txtIdentifier
+        ' 
+        txtIdentifier.Location = New Point(34, 67)
+        txtIdentifier.Margin = New Padding(3, 4, 3, 4)
+        txtIdentifier.Name = "txtIdentifier"
+        txtIdentifier.Size = New Size(251, 27)
+        txtIdentifier.TabIndex = 1
+        ' 
+        ' lblPassword
+        ' 
+        lblPassword.AutoSize = True
+        lblPassword.Location = New Point(34, 120)
+        lblPassword.Name = "lblPassword"
+        lblPassword.Size = New Size(70, 20)
+        lblPassword.TabIndex = 2
+        lblPassword.Text = "Password"
+        ' 
+        ' txtPassword
+        ' 
+        txtPassword.Location = New Point(34, 147)
+        txtPassword.Margin = New Padding(3, 4, 3, 4)
+        txtPassword.Name = "txtPassword"
+        txtPassword.PasswordChar = "*"c
+        txtPassword.Size = New Size(251, 27)
+        txtPassword.TabIndex = 3
+        ' 
+        ' btnLogin
+        ' 
+        btnLogin.Location = New Point(34, 213)
+        btnLogin.Margin = New Padding(3, 4, 3, 4)
+        btnLogin.Name = "btnLogin"
+        btnLogin.Size = New Size(251, 40)
+        btnLogin.TabIndex = 4
+        btnLogin.Text = "Login"
+        btnLogin.UseVisualStyleBackColor = True
+        ' 
+        ' FormLogin
+        ' 
+        AutoScaleDimensions = New SizeF(8F, 20F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(325, 308)
+        Controls.Add(btnLogin)
+        Controls.Add(txtPassword)
+        Controls.Add(lblPassword)
+        Controls.Add(txtIdentifier)
+        Controls.Add(lblIdentifier)
+        FormBorderStyle = FormBorderStyle.FixedSingle
+        Margin = New Padding(3, 4, 3, 4)
+        MaximizeBox = False
+        Name = "FormLogin"
+        StartPosition = FormStartPosition.CenterScreen
+        Text = "Form Login"
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
 

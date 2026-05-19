@@ -18,6 +18,7 @@
         txtEmail.Clear()
         mtbHP.Clear()
         txtPassword.Clear()
+        txtGaji.Clear() ' === TAMBAHAN GAJI ===
         cbRole.SelectedIndex = -1
         ErrorProvider1.Clear()
     End Sub
@@ -42,6 +43,8 @@
             txtCari.Enabled = False     ' Tidak boleh mencari data karyawan lain
             cbRole.Enabled = False      ' Tidak boleh mengubah role
 
+            txtGaji.Enabled = False     ' === TAMBAHAN GAJI === (Karyawan HANYA BISA MELIHAT)
+
             ' Muat data profil diri secara langsung ke kolom input text
             AmbilProfilMandiri()
         ElseIf CurrentRole = "admin" Then
@@ -51,6 +54,8 @@
             btnHapus.Enabled = True
             txtCari.Enabled = True
             cbRole.Enabled = True       ' Admin dapat memilih role
+
+            txtGaji.Enabled = True      ' === TAMBAHAN GAJI === (Admin BISA MENGISI & MENGUBAH)
         End If
     End Sub
 
@@ -63,6 +68,7 @@
             txtEmail.Text = dt.Rows(0)("email").ToString()
             mtbHP.Text = dt.Rows(0)("hp").ToString()
             txtPassword.Text = dt.Rows(0)("password").ToString()
+            txtGaji.Text = dt.Rows(0)("gaji").ToString() ' === TAMBAHAN GAJI ===
 
             ' --- ISI RUNTIME COMBOBOX ROLE ---
             cbRole.SelectedItem = dt.Rows(0)("role").ToString()
@@ -74,6 +80,7 @@
     Private Sub btnSimpan_Click(sender As Object, e As EventArgs) Handles btnSimpan.Click
         ErrorProvider1.Clear()
 
+        ' Pastikan ValidasiKaryawan di modul Anda juga sudah mengecek txtGaji jika diperlukan
         If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, cbRole) Then
             Exit Sub
         End If
@@ -84,6 +91,12 @@
         Dim hp As String = mtbHP.Text.Trim()
         Dim password As String = txtPassword.Text.Trim()
         Dim role As String = cbRole.SelectedItem.ToString().Trim()
+
+        ' === TAMBAHAN GAJI === (Set default 0 jika kosong)
+        Dim gaji As Integer = 0
+        If txtGaji.Text.Trim() <> "" AndAlso IsNumeric(txtGaji.Text.Trim()) Then
+            gaji = Convert.ToInt32(txtGaji.Text.Trim())
+        End If
 
         If nikSudahAda(nik) Then
             MessageBox.Show("NIK sudah terdaftar di sistem, gunakan NIK lain.", "Peringatan Keamanan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -97,7 +110,8 @@
             Return
         End If
 
-        If simpanKaryawan(nik, nama, email, hp, password, role) Then
+        ' === PERHATIAN: Pastikan fungsi simpanKaryawan di Module sudah ditambahkan parameter gaji ===
+        If simpanKaryawan(nik, nama, email, hp, gaji, password, role) Then
             MessageBox.Show("Data karyawan berhasil disimpan ke database.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             TampilData()
             Kosong()
@@ -117,6 +131,10 @@
         Dim email As String = txtEmail.Text.Trim()
         Dim hp As String = mtbHP.Text.Trim()
         Dim password As String = txtPassword.Text.Trim()
+        Dim gaji As Integer = 0
+        If txtGaji.Text.Trim() <> "" AndAlso IsNumeric(txtGaji.Text.Trim()) Then
+            gaji = Convert.ToInt32(txtGaji.Text.Trim())
+        End If
 
         Dim role As String = cbRole.SelectedItem.ToString().Trim().ToLower()
 
@@ -125,8 +143,8 @@
             role = "karyawan"
         End If
 
-        If ubahKaryawan(nik, nama, email, hp, password, role) Then
-            MessageBox.Show("Data diri Anda berhasil diperbarui!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        If ubahKaryawan(nik, nama, email, hp, gaji, password, role) Then
+            MessageBox.Show("Data berhasil diperbarui!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             ' Refresh komponen tabel DataGridView
             TampilData()
@@ -138,12 +156,13 @@
                 Kosong()
             End If
         Else
-            MessageBox.Show("Gagal memperbarui data diri. Pastikan format input benar.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Gagal memperbarui data. Pastikan format input benar.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
 
     ' LOGIKA HAPUS DATA (DELETE)
     Private Sub btnHapus_Click(sender As Object, e As EventArgs) Handles btnHapus.Click
+        ' (Kode hapus tetap sama)
         If CurrentRole = "karyawan" Then
             MessageBox.Show("Akses Ditolak: Karyawan dilarang menghapus akun mandiri/orang lain.", "Pelanggaran Hak Akses", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             Exit Sub
@@ -192,6 +211,7 @@
             If dt.Rows.Count > 0 Then
                 txtPassword.Text = dt.Rows(0)("password").ToString()
                 cbRole.SelectedItem = dt.Rows(0)("role").ToString()
+                txtGaji.Text = dt.Rows(0)("gaji").ToString() ' === TAMBAHAN GAJI ===
             End If
         End If
     End Sub
@@ -217,11 +237,13 @@
                 mtbHP.Text = dt.Rows(0)("hp").ToString()
                 txtPassword.Text = dt.Rows(0)("password").ToString()
                 cbRole.SelectedItem = dt.Rows(0)("role").ToString()
+                txtGaji.Text = dt.Rows(0)("gaji").ToString() ' === TAMBAHAN GAJI ===
             Else
                 txtNama.Clear()
                 txtEmail.Clear()
                 mtbHP.Clear()
                 txtPassword.Clear()
+                txtGaji.Clear() ' === TAMBAHAN GAJI ===
                 cbRole.SelectedIndex = -1
                 MessageBox.Show("Data tidak ditemukan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
@@ -235,6 +257,13 @@
         If IsEnterKey(e) Then
             e.Handled = True
             btnUbah.Focus()
+        End If
+    End Sub
+
+    Private Sub txtGaji_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtGaji.KeyPress
+        ' Hanya izinkan angka dan tombol Backspace
+        If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
+            e.Handled = True
         End If
     End Sub
 
@@ -274,4 +303,5 @@
             Me.Close()
         End If
     End Sub
+
 End Class
