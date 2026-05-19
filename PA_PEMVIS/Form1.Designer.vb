@@ -58,76 +58,82 @@ Partial Class Form1
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(19, 87)
+        Label1.Location = New Point(17, 65)
         Label1.Name = "Label1"
-        Label1.Size = New Size(49, 20)
+        Label1.Size = New Size(39, 15)
         Label1.TabIndex = 0
         Label1.Text = "Nama"
         ' 
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(19, 45)
+        Label2.Location = New Point(17, 34)
         Label2.Name = "Label2"
-        Label2.Size = New Size(33, 20)
+        Label2.Size = New Size(26, 15)
         Label2.TabIndex = 1
         Label2.Text = "NIK"
         ' 
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Location = New Point(19, 132)
+        Label3.Location = New Point(17, 99)
         Label3.Name = "Label3"
-        Label3.Size = New Size(46, 20)
+        Label3.Size = New Size(36, 15)
         Label3.TabIndex = 2
         Label3.Text = "Email"
         ' 
         ' txtNama
         ' 
-        txtNama.Location = New Point(149, 87)
+        txtNama.Location = New Point(130, 65)
+        txtNama.Margin = New Padding(3, 2, 3, 2)
         txtNama.Name = "txtNama"
-        txtNama.Size = New Size(508, 27)
+        txtNama.Size = New Size(445, 23)
         txtNama.TabIndex = 3
         ' 
         ' txtNIK
         ' 
-        txtNIK.Location = New Point(149, 45)
+        txtNIK.Location = New Point(130, 34)
+        txtNIK.Margin = New Padding(3, 2, 3, 2)
         txtNIK.Name = "txtNIK"
-        txtNIK.Size = New Size(508, 27)
+        txtNIK.Size = New Size(445, 23)
         txtNIK.TabIndex = 4
         ' 
         ' btnSimpan
         ' 
-        btnSimpan.Location = New Point(336, 414)
+        btnSimpan.Location = New Point(294, 310)
+        btnSimpan.Margin = New Padding(3, 2, 3, 2)
         btnSimpan.Name = "btnSimpan"
-        btnSimpan.Size = New Size(74, 35)
+        btnSimpan.Size = New Size(65, 26)
         btnSimpan.TabIndex = 6
-        btnSimpan.Text = "Simpan"
+        btnSimpan.Text = "Tambah"
         btnSimpan.UseVisualStyleBackColor = True
         ' 
         ' btnUbah
         ' 
-        btnUbah.Location = New Point(418, 414)
+        btnUbah.Location = New Point(366, 310)
+        btnUbah.Margin = New Padding(3, 2, 3, 2)
         btnUbah.Name = "btnUbah"
-        btnUbah.Size = New Size(74, 35)
+        btnUbah.Size = New Size(65, 26)
         btnUbah.TabIndex = 7
         btnUbah.Text = "Ubah"
         btnUbah.UseVisualStyleBackColor = True
         ' 
         ' btnHapus
         ' 
-        btnHapus.Location = New Point(499, 414)
+        btnHapus.Location = New Point(437, 310)
+        btnHapus.Margin = New Padding(3, 2, 3, 2)
         btnHapus.Name = "btnHapus"
-        btnHapus.Size = New Size(74, 35)
+        btnHapus.Size = New Size(65, 26)
         btnHapus.TabIndex = 8
         btnHapus.Text = "Hapus"
         btnHapus.UseVisualStyleBackColor = True
         ' 
         ' btnBatal
         ' 
-        btnBatal.Location = New Point(580, 414)
+        btnBatal.Location = New Point(508, 310)
+        btnBatal.Margin = New Padding(3, 2, 3, 2)
         btnBatal.Name = "btnBatal"
-        btnBatal.Size = New Size(74, 35)
+        btnBatal.Size = New Size(65, 26)
         btnBatal.TabIndex = 9
         btnBatal.Text = "Batal"
         btnBatal.UseVisualStyleBackColor = True
@@ -135,43 +141,45 @@ Partial Class Form1
         ' dgvKaryawan
         ' 
         dgvKaryawan.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvKaryawan.Location = New Point(19, 483)
+        dgvKaryawan.Location = New Point(17, 362)
+        dgvKaryawan.Margin = New Padding(3, 2, 3, 2)
         dgvKaryawan.Name = "dgvKaryawan"
         dgvKaryawan.RowHeadersWidth = 51
-        dgvKaryawan.Size = New Size(638, 211)
+        dgvKaryawan.Size = New Size(558, 158)
         dgvKaryawan.TabIndex = 10
         ' 
         ' txtEmail
         ' 
-        txtEmail.Location = New Point(149, 132)
+        txtEmail.Location = New Point(130, 99)
+        txtEmail.Margin = New Padding(3, 2, 3, 2)
         txtEmail.Name = "txtEmail"
-        txtEmail.Size = New Size(508, 27)
+        txtEmail.Size = New Size(445, 23)
         txtEmail.TabIndex = 11
         ' 
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Location = New Point(19, 235)
+        Label4.Location = New Point(17, 176)
         Label4.Name = "Label4"
-        Label4.Size = New Size(55, 20)
+        Label4.Size = New Size(45, 15)
         Label4.TabIndex = 12
         Label4.Text = "No. HP"
         ' 
         ' mtbHP
         ' 
-        mtbHP.Location = New Point(149, 231)
-        mtbHP.Margin = New Padding(3, 4, 3, 4)
+        mtbHP.Location = New Point(130, 173)
         mtbHP.Mask = "000000000000"
         mtbHP.Name = "mtbHP"
-        mtbHP.Size = New Size(203, 27)
+        mtbHP.Size = New Size(178, 23)
         mtbHP.TabIndex = 13
         ' 
         ' txtCari
         ' 
-        txtCari.Location = New Point(19, 450)
+        txtCari.Location = New Point(17, 336)
+        txtCari.Margin = New Padding(3, 2, 3, 2)
         txtCari.Name = "txtCari"
         txtCari.PlaceholderText = "Cari nik atau nama karyawan "
-        txtCari.Size = New Size(250, 27)
+        txtCari.Size = New Size(219, 23)
         txtCari.TabIndex = 15
         ' 
         ' ErrorProvider1
@@ -181,25 +189,26 @@ Partial Class Form1
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Location = New Point(19, 322)
+        Label5.Location = New Point(17, 242)
         Label5.Name = "Label5"
-        Label5.Size = New Size(70, 20)
+        Label5.Size = New Size(57, 15)
         Label5.TabIndex = 17
         Label5.Text = "Password"
         ' 
         ' txtPassword
         ' 
-        txtPassword.Location = New Point(149, 318)
+        txtPassword.Location = New Point(130, 238)
+        txtPassword.Margin = New Padding(3, 2, 3, 2)
         txtPassword.Name = "txtPassword"
-        txtPassword.Size = New Size(508, 27)
+        txtPassword.Size = New Size(445, 23)
         txtPassword.TabIndex = 18
         ' 
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.Location = New Point(26, 363)
+        Label6.Location = New Point(23, 272)
         Label6.Name = "Label6"
-        Label6.Size = New Size(39, 20)
+        Label6.Size = New Size(30, 15)
         Label6.TabIndex = 19
         Label6.Text = "Role"
         ' 
@@ -209,64 +218,64 @@ Partial Class Form1
         MenuStrip1.Items.AddRange(New ToolStripItem() {btnForm2, btnLogin})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
-        MenuStrip1.Padding = New Padding(7, 3, 0, 3)
-        MenuStrip1.Size = New Size(683, 30)
+        MenuStrip1.Size = New Size(598, 24)
         MenuStrip1.TabIndex = 21
         MenuStrip1.Text = "MenuStrip1"
         ' 
         ' btnForm2
         ' 
         btnForm2.Name = "btnForm2"
-        btnForm2.Size = New Size(103, 24)
+        btnForm2.Size = New Size(84, 20)
         btnForm2.Text = "tanggungan"
         ' 
         ' btnLogin
         ' 
         btnLogin.Name = "btnLogin"
-        btnLogin.Size = New Size(67, 24)
+        btnLogin.Size = New Size(54, 20)
         btnLogin.Text = "logout"
         ' 
         ' cbRole
         ' 
         cbRole.FormattingEnabled = True
         cbRole.Items.AddRange(New Object() {"karyawan", "admin"})
-        cbRole.Location = New Point(149, 360)
-        cbRole.Margin = New Padding(3, 4, 3, 4)
+        cbRole.Location = New Point(130, 270)
         cbRole.Name = "cbRole"
-        cbRole.Size = New Size(138, 28)
+        cbRole.Size = New Size(121, 23)
         cbRole.TabIndex = 22
         ' 
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Location = New Point(19, 280)
+        Label7.Location = New Point(17, 210)
         Label7.Name = "Label7"
-        Label7.Size = New Size(35, 20)
+        Label7.Size = New Size(27, 15)
         Label7.TabIndex = 23
         Label7.Text = "Gaji"
         ' 
         ' txtGaji
         ' 
-        txtGaji.Location = New Point(149, 277)
+        txtGaji.Location = New Point(130, 208)
+        txtGaji.Margin = New Padding(3, 2, 3, 2)
         txtGaji.Name = "txtGaji"
-        txtGaji.Size = New Size(203, 27)
+        txtGaji.Size = New Size(178, 23)
         txtGaji.TabIndex = 24
         ' 
         ' Label8
         ' 
         Label8.AutoSize = True
-        Label8.Location = New Point(19, 182)
+        Label8.Location = New Point(17, 136)
         Label8.Name = "Label8"
-        Label8.Size = New Size(98, 20)
+        Label8.Size = New Size(78, 15)
         Label8.TabIndex = 25
         Label8.Text = "Jenis Kelamin"
         ' 
         ' rdPria
         ' 
         rdPria.AutoSize = True
-        rdPria.Location = New Point(149, 182)
+        rdPria.Location = New Point(130, 136)
+        rdPria.Margin = New Padding(3, 2, 3, 2)
         rdPria.Name = "rdPria"
-        rdPria.Size = New Size(55, 24)
+        rdPria.Size = New Size(45, 19)
         rdPria.TabIndex = 26
         rdPria.TabStop = True
         rdPria.Text = "Pria"
@@ -275,9 +284,10 @@ Partial Class Form1
         ' rdWanita
         ' 
         rdWanita.AutoSize = True
-        rdWanita.Location = New Point(223, 182)
+        rdWanita.Location = New Point(195, 136)
+        rdWanita.Margin = New Padding(3, 2, 3, 2)
         rdWanita.Name = "rdWanita"
-        rdWanita.Size = New Size(76, 24)
+        rdWanita.Size = New Size(62, 19)
         rdWanita.TabIndex = 27
         rdWanita.TabStop = True
         rdWanita.Text = "Wanita"
@@ -285,9 +295,9 @@ Partial Class Form1
         ' 
         ' Form1
         ' 
-        AutoScaleDimensions = New SizeF(8F, 20F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(683, 706)
+        ClientSize = New Size(598, 530)
         Controls.Add(rdWanita)
         Controls.Add(rdPria)
         Controls.Add(Label8)
@@ -313,6 +323,7 @@ Partial Class Form1
         Controls.Add(Label1)
         Controls.Add(MenuStrip1)
         MainMenuStrip = MenuStrip1
+        Margin = New Padding(3, 2, 3, 2)
         Name = "Form1"
         Text = "Sistem Manajemen Data Karyawan PT.XYZ"
         CType(dgvKaryawan, ComponentModel.ISupportInitialize).EndInit()

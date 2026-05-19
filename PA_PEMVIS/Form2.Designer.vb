@@ -216,7 +216,7 @@ Partial Class Form2
         Controls.Add(MenuStrip1)
         MainMenuStrip = MenuStrip1
         Name = "Form2"
-        Text = "Form2"
+        Text = "Sistem Manajemen Data Karyawan PT.XYZ"
         CType(dgvTanggungan, ComponentModel.ISupportInitialize).EndInit()
         CType(ErrorProvider1, ComponentModel.ISupportInitialize).EndInit()
         MenuStrip1.ResumeLayout(False)

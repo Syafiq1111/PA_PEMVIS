@@ -224,12 +224,19 @@
     ' DATA BINDING GRID VIEW KE INPUT FIELD
     Private Sub dgvKaryawan_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvKaryawan.CellClick
         If e.RowIndex >= 0 Then
-            If CurrentRole = "karyawan" AndAlso dgvKaryawan.Rows(e.RowIndex).Cells("NIK").Value.ToString() <> CurrentNIK Then
+            Dim selectedNIK As String = dgvKaryawan.Rows(e.RowIndex).Cells("NIK").Value.ToString()
+
+            If CurrentRole = "admin" AndAlso selectedNIK = CurrentNIK Then
+                MessageBox.Show("Anda tidak dapat mengubah atau menghapus data Anda sendiri.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+
+            If CurrentRole = "karyawan" AndAlso selectedNIK <> CurrentNIK Then
                 MessageBox.Show("Anda tidak diizinkan mengakses data profile karyawan lain.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Exit Sub
             End If
 
-            txtNIK.Text = dgvKaryawan.Rows(e.RowIndex).Cells("NIK").Value.ToString()
+            txtNIK.Text = selectedNIK
             txtNama.Text = dgvKaryawan.Rows(e.RowIndex).Cells("Nama").Value.ToString()
             txtEmail.Text = dgvKaryawan.Rows(e.RowIndex).Cells("Email").Value.ToString()
             mtbHP.Text = dgvKaryawan.Rows(e.RowIndex).Cells("HP").Value.ToString()
@@ -325,7 +332,7 @@
             Kosong()
             ErrorProvider1.Clear()
             FormLogin.Show()
-            Me.Close()
+            Me.Hide()
         End If
     End Sub
 

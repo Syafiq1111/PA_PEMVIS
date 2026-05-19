@@ -161,21 +161,16 @@
     End Sub
 
     Private Sub btnLogout_Click(sender As Object, e As EventArgs) Handles btnLogout.Click
-        ' Konfirmasi logout
         Dim dialogResult As DialogResult = MessageBox.Show("Apakah Anda yakin ingin logout?", "Konfirmasi Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
         If dialogResult = DialogResult.Yes Then
-            ' Bersihkan sesi pengguna yang sedang aktif
             ClearSession()
 
-            ' Bersihkan form data
             Kosong()
             ErrorProvider1.Clear()
 
-            ' Tampilkan kembali FormLogin
             FormLogin.Show()
 
-            ' Tutup Form2
             Me.Close()
         End If
     End Sub
