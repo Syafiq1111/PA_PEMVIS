@@ -18,8 +18,13 @@
         txtEmail.Clear()
         mtbHP.Clear()
         txtPassword.Clear()
-        txtGaji.Clear() ' === TAMBAHAN GAJI ===
+        txtGaji.Clear()
         cbRole.SelectedIndex = -1
+
+        ' === TAMBAHAN JENIS KELAMIN ===
+        rdPria.Checked = False
+        rdWanita.Checked = False
+
         ErrorProvider1.Clear()
     End Sub
 
@@ -43,7 +48,7 @@
             txtCari.Enabled = False     ' Tidak boleh mencari data karyawan lain
             cbRole.Enabled = False      ' Tidak boleh mengubah role
 
-            txtGaji.Enabled = False     ' === TAMBAHAN GAJI === (Karyawan HANYA BISA MELIHAT)
+            txtGaji.Enabled = False     ' (Karyawan HANYA BISA MELIHAT)
 
             ' Muat data profil diri secara langsung ke kolom input text
             AmbilProfilMandiri()
@@ -55,7 +60,7 @@
             txtCari.Enabled = True
             cbRole.Enabled = True       ' Admin dapat memilih role
 
-            txtGaji.Enabled = True      ' === TAMBAHAN GAJI === (Admin BISA MENGISI & MENGUBAH)
+            txtGaji.Enabled = True      ' (Admin BISA MENGISI & MENGUBAH)
         End If
     End Sub
 
@@ -68,7 +73,15 @@
             txtEmail.Text = dt.Rows(0)("email").ToString()
             mtbHP.Text = dt.Rows(0)("hp").ToString()
             txtPassword.Text = dt.Rows(0)("password").ToString()
-            txtGaji.Text = dt.Rows(0)("gaji").ToString() ' === TAMBAHAN GAJI ===
+            txtGaji.Text = dt.Rows(0)("gaji").ToString()
+
+            ' === TAMBAHAN JENIS KELAMIN ===
+            Dim jk As String = dt.Rows(0)("jenis_kelamin").ToString()
+            If jk = "Pria" Then
+                rdPria.Checked = True
+            ElseIf jk = "Wanita" Then
+                rdWanita.Checked = True
+            End If
 
             ' --- ISI RUNTIME COMBOBOX ROLE ---
             cbRole.SelectedItem = dt.Rows(0)("role").ToString()
@@ -80,8 +93,17 @@
     Private Sub btnSimpan_Click(sender As Object, e As EventArgs) Handles btnSimpan.Click
         ErrorProvider1.Clear()
 
-        ' Pastikan ValidasiKaryawan di modul Anda juga sudah mengecek txtGaji jika diperlukan
-        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, cbRole) Then
+        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, cbRole, txtGaji) Then
+            Exit Sub
+        End If
+
+        Dim jenis_kelamin As String = ""
+        If rdPria.Checked Then
+            jenis_kelamin = "Pria"
+        ElseIf rdWanita.Checked Then
+            jenis_kelamin = "Wanita"
+        Else
+            MessageBox.Show("Silakan pilih Jenis Kelamin terlebih dahulu.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
@@ -92,7 +114,6 @@
         Dim password As String = txtPassword.Text.Trim()
         Dim role As String = cbRole.SelectedItem.ToString().Trim()
 
-        ' === TAMBAHAN GAJI === (Set default 0 jika kosong)
         Dim gaji As Integer = 0
         If txtGaji.Text.Trim() <> "" AndAlso IsNumeric(txtGaji.Text.Trim()) Then
             gaji = Convert.ToInt32(txtGaji.Text.Trim())
@@ -110,8 +131,8 @@
             Return
         End If
 
-        ' === PERHATIAN: Pastikan fungsi simpanKaryawan di Module sudah ditambahkan parameter gaji ===
-        If simpanKaryawan(nik, nama, email, hp, gaji, password, role) Then
+        ' === PERHATIAN: Tambahkan parameter jenis_kelamin pada fungsi simpanKaryawan di Module ===
+        If simpanKaryawan(nik, nama, email, hp, jenis_kelamin, gaji, password, role) Then
             MessageBox.Show("Data karyawan berhasil disimpan ke database.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             TampilData()
             Kosong()
@@ -122,7 +143,17 @@
     Private Sub btnUbah_Click(sender As Object, e As EventArgs) Handles btnUbah.Click
         ErrorProvider1.Clear()
 
-        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, cbRole) Then
+        If Not ValidasiKaryawan(ErrorProvider1, txtNIK, txtNama, txtEmail, mtbHP, txtPassword, cbRole, txtGaji) Then
+            Exit Sub
+        End If
+
+        Dim jenis_kelamin As String = ""
+        If rdPria.Checked Then
+            jenis_kelamin = "Pria"
+        ElseIf rdWanita.Checked Then
+            jenis_kelamin = "Wanita"
+        Else
+            MessageBox.Show("Silakan pilih Jenis Kelamin terlebih dahulu.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
@@ -139,17 +170,15 @@
         Dim role As String = cbRole.SelectedItem.ToString().Trim().ToLower()
 
         If CurrentRole = "karyawan" Then
-            ' untuk mencegah manipulasi teks via inspeksi runtime UI
             role = "karyawan"
         End If
 
-        If ubahKaryawan(nik, nama, email, hp, gaji, password, role) Then
+
+        If ubahKaryawan(nik, nama, email, hp, jenis_kelamin, gaji, password, role) Then
             MessageBox.Show("Data berhasil diperbarui!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            ' Refresh komponen tabel DataGridView
             TampilData()
 
-            ' Jika pengguna adalah karyawan, kunci kembali profilnya di form input
             If CurrentRole = "karyawan" Then
                 AmbilProfilMandiri()
             Else
@@ -162,7 +191,6 @@
 
     ' LOGIKA HAPUS DATA (DELETE)
     Private Sub btnHapus_Click(sender As Object, e As EventArgs) Handles btnHapus.Click
-        ' (Kode hapus tetap sama)
         If CurrentRole = "karyawan" Then
             MessageBox.Show("Akses Ditolak: Karyawan dilarang menghapus akun mandiri/orang lain.", "Pelanggaran Hak Akses", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             Exit Sub
@@ -196,7 +224,6 @@
     ' DATA BINDING GRID VIEW KE INPUT FIELD
     Private Sub dgvKaryawan_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvKaryawan.CellClick
         If e.RowIndex >= 0 Then
-            ' Jika user adalah karyawan, hindari proses select dari gridview baris lain jika ada keganjilan data runtime
             If CurrentRole = "karyawan" AndAlso dgvKaryawan.Rows(e.RowIndex).Cells("NIK").Value.ToString() <> CurrentNIK Then
                 MessageBox.Show("Anda tidak diizinkan mengakses data profile karyawan lain.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Exit Sub
@@ -211,7 +238,15 @@
             If dt.Rows.Count > 0 Then
                 txtPassword.Text = dt.Rows(0)("password").ToString()
                 cbRole.SelectedItem = dt.Rows(0)("role").ToString()
-                txtGaji.Text = dt.Rows(0)("gaji").ToString() ' === TAMBAHAN GAJI ===
+                txtGaji.Text = dt.Rows(0)("gaji").ToString()
+
+                ' === TAMBAHAN JENIS KELAMIN ===
+                Dim jk As String = dt.Rows(0)("jenis_kelamin").ToString()
+                If jk = "Pria" Then
+                    rdPria.Checked = True
+                ElseIf jk = "Wanita" Then
+                    rdWanita.Checked = True
+                End If
             End If
         End If
     End Sub
@@ -221,7 +256,6 @@
         If IsEnterKey(e) Then
             e.Handled = True
 
-            ' Batasi pencarian pencocokan NIK jika user adalah karyawan biasa
             If CurrentRole = "karyawan" AndAlso txtNIK.Text.Trim() <> CurrentNIK Then
                 MessageBox.Show("Anda hanya dapat memuat profil data diri Anda sendiri.", "Batasan Hak Akses", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 AmbilProfilMandiri()
@@ -237,21 +271,23 @@
                 mtbHP.Text = dt.Rows(0)("hp").ToString()
                 txtPassword.Text = dt.Rows(0)("password").ToString()
                 cbRole.SelectedItem = dt.Rows(0)("role").ToString()
-                txtGaji.Text = dt.Rows(0)("gaji").ToString() ' === TAMBAHAN GAJI ===
+                txtGaji.Text = dt.Rows(0)("gaji").ToString()
+
+                ' === TAMBAHAN JENIS KELAMIN ===
+                Dim jk As String = dt.Rows(0)("jenis_kelamin").ToString()
+                If jk = "Pria" Then
+                    rdPria.Checked = True
+                ElseIf jk = "Wanita" Then
+                    rdWanita.Checked = True
+                End If
             Else
-                txtNama.Clear()
-                txtEmail.Clear()
-                mtbHP.Clear()
-                txtPassword.Clear()
-                txtGaji.Clear() ' === TAMBAHAN GAJI ===
-                cbRole.SelectedIndex = -1
+                Kosong() ' Panggil Kosong() agar lebih efisien mereset semua termasuk radio button
                 MessageBox.Show("Data tidak ditemukan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
             txtNIK.Focus()
         End If
     End Sub
 
-    ' VALIDASI HURUF
     Private Sub txtNama_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtNama.KeyPress
         HanyaHuruf(e)
         If IsEnterKey(e) Then
@@ -261,13 +297,11 @@
     End Sub
 
     Private Sub txtGaji_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtGaji.KeyPress
-        ' Hanya izinkan angka dan tombol Backspace
         If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
             e.Handled = True
         End If
     End Sub
 
-    ' PENCARIAN LIVE-SEARCH TEXTBOX
     Private Sub txtCari_TextChanged(sender As Object, e As EventArgs) Handles txtCari.TextChanged
         If CurrentRole = "karyawan" Then Exit Sub
 
@@ -278,30 +312,28 @@
         End If
     End Sub
 
-    ' NAVIGASI KE INTERFACE MANAGEMEN TANGGUNGAN
     Private Sub btnForm2_Click(sender As Object, e As EventArgs) Handles btnForm2.Click
         Form2.Show()
         Me.Hide()
     End Sub
 
     Private Sub LogoutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
-        ' Konfirmasi logout
         Dim dialogResult As DialogResult = MessageBox.Show("Apakah Anda yakin ingin logout?", "Konfirmasi Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
         If dialogResult = DialogResult.Yes Then
-            ' Bersihkan sesi pengguna yang sedang aktif
             ClearSession()
-
-            ' Bersihkan form data
             Kosong()
             ErrorProvider1.Clear()
-
-            ' Tampilkan kembali FormLogin
             FormLogin.Show()
-
-            ' Tutup Form2
             Me.Close()
         End If
     End Sub
 
+    Private Sub rdPria_CheckedChanged(sender As Object, e As EventArgs) Handles rdPria.CheckedChanged
+
+    End Sub
+
+    Private Sub rdWanita_CheckedChanged(sender As Object, e As EventArgs) Handles rdWanita.CheckedChanged
+
+    End Sub
 End Class

@@ -110,3 +110,6 @@ COMMIT;
 
 ALTER TABLE `karyawan` 
 ADD COLUMN `gaji` INT(11) NOT NULL DEFAULT 0 AFTER `hp`;
+
+ALTER TABLE `karyawan` 
+ADD COLUMN `jenis_kelamin` ENUM('Pria', 'Wanita') NOT NULL AFTER `email`;

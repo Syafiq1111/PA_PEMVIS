@@ -6,6 +6,7 @@
             e.Handled = True
         End If
     End Sub
+
     Public Sub HanyaAngka(e As KeyPressEventArgs)
         If Char.IsDigit(e.KeyChar) OrElse Char.IsControl(e.KeyChar) Then
             e.Handled = False
@@ -44,19 +45,19 @@
         End If
     End Function
 
-    Public Function ValidasiKaryawan(ep As ErrorProvider, txtNIK As TextBox, txtNama As TextBox, txtEmail As TextBox, txtHP As MaskedTextBox, txtPassword As TextBox, cbRole As ComboBox) As Boolean
+    Public Function ValidasiKaryawan(ep As ErrorProvider, txtNIK As TextBox, txtNama As TextBox, txtEmail As TextBox, txtHP As MaskedTextBox, txtPassword As TextBox, cbRole As ComboBox, txtGaji As TextBox) As Boolean
 
         Dim nikValid As Boolean = ValidasiTextBox(ep, txtNIK, "NIK tidak boleh kosong")
         Dim namaValid As Boolean = ValidasiTextBox(ep, txtNama, "Nama tidak boleh kosong")
         Dim emailValid As Boolean = ValidasiTextBox(ep, txtEmail, "Email tidak boleh kosong")
         Dim hpValid As Boolean = ValidasiMaskedTextBox(ep, txtHP, "HP tidak boleh kosong")
         Dim passValid As Boolean = ValidasiTextBox(ep, txtPassword, "Password tidak boleh kosong")
-
-        ' PENAMBAHAN VALIDASI UNTUK ROLE (COMBOBOX)
         Dim roleValid As Boolean = ValidasiComboBox(ep, cbRole, "Role tidak boleh kosong")
 
-        ' Semua kondisi harus bernilai True agar data dinyatakan valid
-        Return nikValid And namaValid And emailValid And hpValid And passValid And roleValid
+        Dim gajiValid As Boolean = ValidasiTextBox(ep, txtGaji, "Gaji tidak boleh kosong")
+
+        ' Semua kondisi harus bernilai True agar data dinyatakan valid (tambah And gajiValid)
+        Return nikValid And namaValid And emailValid And hpValid And passValid And roleValid And gajiValid
     End Function
 
     Public Function IsEnterKey(e As KeyPressEventArgs) As Boolean
@@ -70,4 +71,5 @@
         Dim hubunganValid As Boolean = ValidasiTextBox(ep, txtHubungan, "Hubungan tidak boleh kosong")
         Return nikValid And namaValid And statusValid And hubunganValid
     End Function
+
 End Module

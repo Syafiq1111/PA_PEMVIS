@@ -47,6 +47,9 @@ Partial Class Form1
         cbRole = New ComboBox()
         Label7 = New Label()
         txtGaji = New TextBox()
+        Label8 = New Label()
+        rdPria = New RadioButton()
+        rdWanita = New RadioButton()
         CType(dgvKaryawan, ComponentModel.ISupportInitialize).BeginInit()
         CType(ErrorProvider1, ComponentModel.ISupportInitialize).BeginInit()
         MenuStrip1.SuspendLayout()
@@ -95,7 +98,7 @@ Partial Class Form1
         ' 
         ' btnSimpan
         ' 
-        btnSimpan.Location = New Point(336, 362)
+        btnSimpan.Location = New Point(336, 414)
         btnSimpan.Name = "btnSimpan"
         btnSimpan.Size = New Size(74, 35)
         btnSimpan.TabIndex = 6
@@ -104,7 +107,7 @@ Partial Class Form1
         ' 
         ' btnUbah
         ' 
-        btnUbah.Location = New Point(418, 362)
+        btnUbah.Location = New Point(418, 414)
         btnUbah.Name = "btnUbah"
         btnUbah.Size = New Size(74, 35)
         btnUbah.TabIndex = 7
@@ -113,7 +116,7 @@ Partial Class Form1
         ' 
         ' btnHapus
         ' 
-        btnHapus.Location = New Point(499, 362)
+        btnHapus.Location = New Point(499, 414)
         btnHapus.Name = "btnHapus"
         btnHapus.Size = New Size(74, 35)
         btnHapus.TabIndex = 8
@@ -122,7 +125,7 @@ Partial Class Form1
         ' 
         ' btnBatal
         ' 
-        btnBatal.Location = New Point(580, 362)
+        btnBatal.Location = New Point(580, 414)
         btnBatal.Name = "btnBatal"
         btnBatal.Size = New Size(74, 35)
         btnBatal.TabIndex = 9
@@ -132,7 +135,7 @@ Partial Class Form1
         ' dgvKaryawan
         ' 
         dgvKaryawan.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvKaryawan.Location = New Point(19, 431)
+        dgvKaryawan.Location = New Point(19, 483)
         dgvKaryawan.Name = "dgvKaryawan"
         dgvKaryawan.RowHeadersWidth = 51
         dgvKaryawan.Size = New Size(638, 211)
@@ -148,7 +151,7 @@ Partial Class Form1
         ' Label4
         ' 
         Label4.AutoSize = True
-        Label4.Location = New Point(19, 183)
+        Label4.Location = New Point(19, 235)
         Label4.Name = "Label4"
         Label4.Size = New Size(55, 20)
         Label4.TabIndex = 12
@@ -156,7 +159,7 @@ Partial Class Form1
         ' 
         ' mtbHP
         ' 
-        mtbHP.Location = New Point(149, 179)
+        mtbHP.Location = New Point(149, 231)
         mtbHP.Margin = New Padding(3, 4, 3, 4)
         mtbHP.Mask = "000000000000"
         mtbHP.Name = "mtbHP"
@@ -165,7 +168,7 @@ Partial Class Form1
         ' 
         ' txtCari
         ' 
-        txtCari.Location = New Point(19, 398)
+        txtCari.Location = New Point(19, 450)
         txtCari.Name = "txtCari"
         txtCari.PlaceholderText = "Cari nik atau nama karyawan "
         txtCari.Size = New Size(250, 27)
@@ -178,7 +181,7 @@ Partial Class Form1
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Location = New Point(19, 270)
+        Label5.Location = New Point(19, 322)
         Label5.Name = "Label5"
         Label5.Size = New Size(70, 20)
         Label5.TabIndex = 17
@@ -186,7 +189,7 @@ Partial Class Form1
         ' 
         ' txtPassword
         ' 
-        txtPassword.Location = New Point(149, 266)
+        txtPassword.Location = New Point(149, 318)
         txtPassword.Name = "txtPassword"
         txtPassword.Size = New Size(508, 27)
         txtPassword.TabIndex = 18
@@ -194,7 +197,7 @@ Partial Class Form1
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.Location = New Point(26, 324)
+        Label6.Location = New Point(26, 363)
         Label6.Name = "Label6"
         Label6.Size = New Size(39, 20)
         Label6.TabIndex = 19
@@ -227,7 +230,7 @@ Partial Class Form1
         ' 
         cbRole.FormattingEnabled = True
         cbRole.Items.AddRange(New Object() {"karyawan", "admin"})
-        cbRole.Location = New Point(149, 316)
+        cbRole.Location = New Point(149, 360)
         cbRole.Margin = New Padding(3, 4, 3, 4)
         cbRole.Name = "cbRole"
         cbRole.Size = New Size(138, 28)
@@ -236,7 +239,7 @@ Partial Class Form1
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Location = New Point(19, 228)
+        Label7.Location = New Point(19, 280)
         Label7.Name = "Label7"
         Label7.Size = New Size(35, 20)
         Label7.TabIndex = 23
@@ -244,16 +247,50 @@ Partial Class Form1
         ' 
         ' txtGaji
         ' 
-        txtGaji.Location = New Point(149, 225)
+        txtGaji.Location = New Point(149, 277)
         txtGaji.Name = "txtGaji"
         txtGaji.Size = New Size(203, 27)
         txtGaji.TabIndex = 24
         ' 
+        ' Label8
+        ' 
+        Label8.AutoSize = True
+        Label8.Location = New Point(19, 182)
+        Label8.Name = "Label8"
+        Label8.Size = New Size(98, 20)
+        Label8.TabIndex = 25
+        Label8.Text = "Jenis Kelamin"
+        ' 
+        ' rdPria
+        ' 
+        rdPria.AutoSize = True
+        rdPria.Location = New Point(149, 182)
+        rdPria.Name = "rdPria"
+        rdPria.Size = New Size(55, 24)
+        rdPria.TabIndex = 26
+        rdPria.TabStop = True
+        rdPria.Text = "Pria"
+        rdPria.UseVisualStyleBackColor = True
+        ' 
+        ' rdWanita
+        ' 
+        rdWanita.AutoSize = True
+        rdWanita.Location = New Point(223, 182)
+        rdWanita.Name = "rdWanita"
+        rdWanita.Size = New Size(76, 24)
+        rdWanita.TabIndex = 27
+        rdWanita.TabStop = True
+        rdWanita.Text = "Wanita"
+        rdWanita.UseVisualStyleBackColor = True
+        ' 
         ' Form1
         ' 
-        AutoScaleDimensions = New SizeF(8.0F, 20.0F)
+        AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(683, 654)
+        ClientSize = New Size(683, 706)
+        Controls.Add(rdWanita)
+        Controls.Add(rdPria)
+        Controls.Add(Label8)
         Controls.Add(txtGaji)
         Controls.Add(Label7)
         Controls.Add(cbRole)
@@ -310,5 +347,8 @@ Partial Class Form1
     Friend WithEvents cbRole As ComboBox
     Friend WithEvents txtGaji As TextBox
     Friend WithEvents Label7 As Label
+    Friend WithEvents rdWanita As RadioButton
+    Friend WithEvents rdPria As RadioButton
+    Friend WithEvents Label8 As Label
 
 End Class
