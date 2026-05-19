@@ -1,4 +1,6 @@
-﻿Public Class Form2
+﻿Imports System.Drawing.Printing
+
+Public Class Form2
     Private selectedId As Integer = 0
 
     Private Sub Kosong()
@@ -21,7 +23,7 @@
         LoadNik()
         TampilTanggungan()
         Kosong()
-        
+
         If CurrentRole = "karyawan" Then
             btnKaryawan.Visible = False
         Else
@@ -172,6 +174,55 @@
             FormLogin.Show()
 
             Me.Close()
+        End If
+    End Sub
+
+    ' ======================= FITUR CETAK LAPORAN TANGGUNGAN =======================
+    Private Function SiapkanDataCetakTanggungan() As Boolean
+        Dim dt As DataTable
+        If CurrentRole = "admin" Then
+            dt = DataModule.GetAllTanggunganUntukLaporan()   ' semua tanggungan
+        Else
+            dt = DataModule.GetAllTanggunganUntukLaporan(CurrentNIK)   ' hanya milik karyawan ybs
+        End If
+
+        If dt Is Nothing OrElse dt.Rows.Count = 0 Then
+            MessageBox.Show("Tidak ada data tanggungan yang dapat dicetak.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return False
+        End If
+        PrintModule.SetLaporanData(dt, "Tanggungan")
+        Return True
+    End Function
+
+    Private Sub btnPreviewCetak_Click(sender As Object, e As EventArgs) Handles btnPreviewCetak.Click
+        Try
+            If Not SiapkanDataCetakTanggungan() Then Exit Sub
+            docLaporan.DefaultPageSettings.Landscape = True
+            dlgPreview.Document = docLaporan
+            dlgPreview.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show("Terjadi kesalahan saat menampilkan preview: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnCetak_Click(sender As Object, e As EventArgs) Handles btnCetak.Click
+        Try
+            If Not SiapkanDataCetakTanggungan() Then Exit Sub
+            docLaporan.DefaultPageSettings.Landscape = True
+            docLaporan.Print()
+        Catch ex As Exception
+            MessageBox.Show("Terjadi kesalahan saat mencetak dokumen: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub docLaporan_PrintPage(sender As Object, e As PrintPageEventArgs) Handles docLaporan.PrintPage
+        If PrintModule.LaporanTipe = "Tanggungan" Then
+            PrintModule.RenderLaporanTanggungan(e)
+        Else
+            Using f As New Font("Calibri", 12)
+                e.Graphics.DrawString("Tipe laporan tidak dikenali.", f, Brushes.Black, 50, 50)
+            End Using
+            e.HasMorePages = False
         End If
     End Sub
 

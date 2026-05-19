@@ -330,4 +330,45 @@ Module DataModule
             Return False
         End Try
     End Function
+    ' ======================= LAPORAN KARYAWAN =======================
+    Public Function GetAllKaryawanUntukLaporan() As DataTable
+        Dim dt As New DataTable()
+        Dim query As String = "SELECT nik, nama, email, hp, jenis_kelamin, gaji, role FROM karyawan ORDER BY nik ASC"
+        Try
+            Using conn As MySqlConnection = GetConnection()
+                Using da As New MySqlDataAdapter(query, conn)
+                    da.Fill(dt)
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Gagal mengambil data laporan karyawan: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+        Return dt
+    End Function
+
+    ' ======================= LAPORAN TANGGUNGAN =======================
+    Public Function GetAllTanggunganUntukLaporan(Optional ByVal filterNIK As String = "") As DataTable
+        Dim dt As New DataTable()
+        Dim query As String = "SELECT t.id_tanggungan, t.nik_karyawan, k.nama AS nama_karyawan, t.nama AS nama_tanggungan, t.hubungan, t.status FROM tanggungan t INNER JOIN karyawan k ON t.nik_karyawan = k.nik"
+        If filterNIK <> "" Then
+            query &= " WHERE t.nik_karyawan = @nik"
+        End If
+        query &= " ORDER BY t.nik_karyawan, t.nama"
+        Try
+            Using conn As MySqlConnection = GetConnection()
+                Using cmd As New MySqlCommand(query, conn)
+                    If filterNIK <> "" Then
+                        cmd.Parameters.AddWithValue("@nik", filterNIK)
+                    End If
+                    Using da As New MySqlDataAdapter(cmd)
+                        da.Fill(dt)
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Gagal mengambil data laporan tanggungan: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+        Return dt
+    End Function
+
 End Module

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\oru\\source\\repos\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj": {}
+    "C:\\KULIAH\\PA\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj": {}
   },
   "projects": {
-    "C:\\Users\\oru\\source\\repos\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj": {
+    "C:\\KULIAH\\PA\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\oru\\source\\repos\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj",
+        "projectUniqueName": "C:\\KULIAH\\PA\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj",
         "projectName": "PA_PEMVIS",
-        "projectPath": "C:\\Users\\oru\\source\\repos\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj",
-        "packagesPath": "C:\\Users\\oru\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\oru\\source\\repos\\PA_PEMVIS\\PA_PEMVIS\\obj\\",
+        "projectPath": "C:\\KULIAH\\PA\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj",
+        "packagesPath": "C:\\Users\\USER-GK\\.nuget\\packages\\",
+        "outputPath": "C:\\KULIAH\\PA\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\oru\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USER-GK\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -41,7 +41,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.300"
       },
       "frameworks": {
         "net10.0-windows": {
@@ -72,7 +72,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

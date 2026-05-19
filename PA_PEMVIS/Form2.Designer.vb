@@ -23,10 +23,7 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
-        Label1 = New Label()
-        Label2 = New Label()
-        Label3 = New Label()
-        Label4 = New Label()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form2))
         cbNik = New ComboBox()
         cbStatus = New ComboBox()
         txtNama = New TextBox()
@@ -41,51 +38,19 @@ Partial Class Form2
         MenuStrip1 = New MenuStrip()
         btnKaryawan = New ToolStripMenuItem()
         btnLogout = New ToolStripMenuItem()
+        btnCetak = New Button()
+        btnPreviewCetak = New Button()
+        docLaporan = New Printing.PrintDocument()
+        dlgPreview = New PrintPreviewDialog()
         CType(dgvTanggungan, ComponentModel.ISupportInitialize).BeginInit()
         CType(ErrorProvider1, ComponentModel.ISupportInitialize).BeginInit()
         MenuStrip1.SuspendLayout()
         SuspendLayout()
         ' 
-        ' Label1
-        ' 
-        Label1.AutoSize = True
-        Label1.Location = New Point(27, 35)
-        Label1.Name = "Label1"
-        Label1.Size = New Size(26, 15)
-        Label1.TabIndex = 0
-        Label1.Text = "NIK"
-        ' 
-        ' Label2
-        ' 
-        Label2.AutoSize = True
-        Label2.Location = New Point(27, 69)
-        Label2.Name = "Label2"
-        Label2.Size = New Size(39, 15)
-        Label2.TabIndex = 1
-        Label2.Text = "Nama"
-        ' 
-        ' Label3
-        ' 
-        Label3.AutoSize = True
-        Label3.Location = New Point(27, 102)
-        Label3.Name = "Label3"
-        Label3.Size = New Size(64, 15)
-        Label3.TabIndex = 2
-        Label3.Text = "Hubungan"
-        ' 
-        ' Label4
-        ' 
-        Label4.AutoSize = True
-        Label4.Location = New Point(27, 133)
-        Label4.Name = "Label4"
-        Label4.Size = New Size(39, 15)
-        Label4.TabIndex = 3
-        Label4.Text = "Status"
-        ' 
         ' cbNik
         ' 
         cbNik.FormattingEnabled = True
-        cbNik.Location = New Point(119, 32)
+        cbNik.Location = New Point(138, 68)
         cbNik.Name = "cbNik"
         cbNik.Size = New Size(336, 23)
         cbNik.TabIndex = 4
@@ -94,21 +59,21 @@ Partial Class Form2
         ' 
         cbStatus.FormattingEnabled = True
         cbStatus.Items.AddRange(New Object() {"Bekerja", "TIdak Bekerja", "Meninggal Dunia"})
-        cbStatus.Location = New Point(119, 133)
+        cbStatus.Location = New Point(138, 215)
         cbStatus.Name = "cbStatus"
         cbStatus.Size = New Size(178, 23)
         cbStatus.TabIndex = 5
         ' 
         ' txtNama
         ' 
-        txtNama.Location = New Point(119, 66)
+        txtNama.Location = New Point(138, 120)
         txtNama.Name = "txtNama"
         txtNama.Size = New Size(336, 23)
         txtNama.TabIndex = 6
         ' 
         ' txtHubungan
         ' 
-        txtHubungan.Location = New Point(119, 99)
+        txtHubungan.Location = New Point(138, 168)
         txtHubungan.Name = "txtHubungan"
         txtHubungan.Size = New Size(336, 23)
         txtHubungan.TabIndex = 7
@@ -116,57 +81,73 @@ Partial Class Form2
         ' dgvTanggungan
         ' 
         dgvTanggungan.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvTanggungan.Location = New Point(27, 216)
+        dgvTanggungan.Location = New Point(27, 304)
         dgvTanggungan.Name = "dgvTanggungan"
-        dgvTanggungan.Size = New Size(519, 172)
+        dgvTanggungan.Size = New Size(539, 117)
         dgvTanggungan.TabIndex = 8
         ' 
         ' btnSimpan
         ' 
-        btnSimpan.Location = New Point(481, 29)
+        btnSimpan.BackColor = Color.FromArgb(CByte(67), CByte(66), CByte(245))
+        btnSimpan.FlatStyle = FlatStyle.Popup
+        btnSimpan.Font = New Font("Helvetica", 9F)
+        btnSimpan.ForeColor = Color.White
+        btnSimpan.Location = New Point(489, 78)
         btnSimpan.Margin = New Padding(3, 2, 3, 2)
         btnSimpan.Name = "btnSimpan"
         btnSimpan.Size = New Size(65, 26)
         btnSimpan.TabIndex = 9
         btnSimpan.Text = "Simpan"
-        btnSimpan.UseVisualStyleBackColor = True
+        btnSimpan.UseVisualStyleBackColor = False
         ' 
         ' btnBatal
         ' 
-        btnBatal.Location = New Point(481, 133)
+        btnBatal.BackColor = Color.FromArgb(CByte(67), CByte(66), CByte(245))
+        btnBatal.FlatStyle = FlatStyle.Popup
+        btnBatal.Font = New Font("Helvetica", 9F)
+        btnBatal.ForeColor = Color.White
+        btnBatal.Location = New Point(489, 182)
         btnBatal.Margin = New Padding(3, 2, 3, 2)
         btnBatal.Name = "btnBatal"
         btnBatal.Size = New Size(65, 26)
         btnBatal.TabIndex = 12
         btnBatal.Text = "Batal"
-        btnBatal.UseVisualStyleBackColor = True
+        btnBatal.UseVisualStyleBackColor = False
         ' 
         ' btnHapus
         ' 
-        btnHapus.Location = New Point(481, 99)
+        btnHapus.BackColor = Color.FromArgb(CByte(67), CByte(66), CByte(245))
+        btnHapus.FlatStyle = FlatStyle.Popup
+        btnHapus.Font = New Font("Helvetica", 9F)
+        btnHapus.ForeColor = Color.White
+        btnHapus.Location = New Point(489, 148)
         btnHapus.Margin = New Padding(3, 2, 3, 2)
         btnHapus.Name = "btnHapus"
         btnHapus.Size = New Size(65, 26)
         btnHapus.TabIndex = 11
         btnHapus.Text = "Hapus"
-        btnHapus.UseVisualStyleBackColor = True
+        btnHapus.UseVisualStyleBackColor = False
         ' 
         ' btnUbah
         ' 
-        btnUbah.Location = New Point(481, 66)
+        btnUbah.BackColor = Color.FromArgb(CByte(67), CByte(66), CByte(245))
+        btnUbah.FlatStyle = FlatStyle.Popup
+        btnUbah.Font = New Font("Helvetica", 9F)
+        btnUbah.ForeColor = Color.White
+        btnUbah.Location = New Point(489, 115)
         btnUbah.Margin = New Padding(3, 2, 3, 2)
         btnUbah.Name = "btnUbah"
         btnUbah.Size = New Size(65, 26)
         btnUbah.TabIndex = 10
         btnUbah.Text = "Ubah"
-        btnUbah.UseVisualStyleBackColor = True
+        btnUbah.UseVisualStyleBackColor = False
         ' 
         ' txtCari
         ' 
-        txtCari.Location = New Point(27, 176)
+        txtCari.Location = New Point(27, 276)
         txtCari.Margin = New Padding(3, 2, 3, 2)
         txtCari.Name = "txtCari"
-        txtCari.Size = New Size(519, 23)
+        txtCari.Size = New Size(539, 23)
         txtCari.TabIndex = 23
         ' 
         ' ErrorProvider1
@@ -194,11 +175,54 @@ Partial Class Form2
         btnLogout.Size = New Size(57, 20)
         btnLogout.Text = "Logout"
         ' 
+        ' btnCetak
+        ' 
+        btnCetak.BackColor = Color.FromArgb(CByte(67), CByte(66), CByte(245))
+        btnCetak.FlatStyle = FlatStyle.Popup
+        btnCetak.Font = New Font("Helvetica", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        btnCetak.ForeColor = Color.White
+        btnCetak.Location = New Point(403, 214)
+        btnCetak.Name = "btnCetak"
+        btnCetak.Size = New Size(75, 23)
+        btnCetak.TabIndex = 25
+        btnCetak.Text = "Cetak"
+        btnCetak.UseVisualStyleBackColor = False
+        ' 
+        ' btnPreviewCetak
+        ' 
+        btnPreviewCetak.BackColor = Color.FromArgb(CByte(67), CByte(66), CByte(245))
+        btnPreviewCetak.FlatStyle = FlatStyle.Popup
+        btnPreviewCetak.Font = New Font("Helvetica", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        btnPreviewCetak.ForeColor = Color.White
+        btnPreviewCetak.Location = New Point(322, 215)
+        btnPreviewCetak.Name = "btnPreviewCetak"
+        btnPreviewCetak.Size = New Size(75, 23)
+        btnPreviewCetak.TabIndex = 26
+        btnPreviewCetak.Text = "Preview"
+        btnPreviewCetak.UseVisualStyleBackColor = False
+        ' 
+        ' docLaporan
+        ' 
+        ' 
+        ' dlgPreview
+        ' 
+        dlgPreview.AutoScrollMargin = New Size(0, 0)
+        dlgPreview.AutoScrollMinSize = New Size(0, 0)
+        dlgPreview.ClientSize = New Size(400, 300)
+        dlgPreview.Enabled = True
+        dlgPreview.Icon = CType(resources.GetObject("dlgPreview.Icon"), Icon)
+        dlgPreview.Name = "dlgPreview"
+        dlgPreview.Visible = False
+        ' 
         ' Form2
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(578, 411)
+        BackColor = Color.FromArgb(CByte(67), CByte(66), CByte(245))
+        BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), Image)
+        ClientSize = New Size(578, 443)
+        Controls.Add(btnPreviewCetak)
+        Controls.Add(btnCetak)
         Controls.Add(txtCari)
         Controls.Add(btnBatal)
         Controls.Add(btnHapus)
@@ -209,10 +233,6 @@ Partial Class Form2
         Controls.Add(txtNama)
         Controls.Add(cbStatus)
         Controls.Add(cbNik)
-        Controls.Add(Label4)
-        Controls.Add(Label3)
-        Controls.Add(Label2)
-        Controls.Add(Label1)
         Controls.Add(MenuStrip1)
         MainMenuStrip = MenuStrip1
         Name = "Form2"
@@ -224,11 +244,6 @@ Partial Class Form2
         ResumeLayout(False)
         PerformLayout()
     End Sub
-
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
-    Friend WithEvents Label3 As Label
-    Friend WithEvents Label4 As Label
     Friend WithEvents cbNik As ComboBox
     Friend WithEvents cbStatus As ComboBox
     Friend WithEvents txtNama As TextBox
@@ -243,4 +258,8 @@ Partial Class Form2
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents btnLogout As ToolStripMenuItem
     Friend WithEvents btnKaryawan As ToolStripMenuItem
+    Friend WithEvents btnPreviewCetak As Button
+    Friend WithEvents btnCetak As Button
+    Friend WithEvents docLaporan As Printing.PrintDocument
+    Friend WithEvents dlgPreview As PrintPreviewDialog
 End Class

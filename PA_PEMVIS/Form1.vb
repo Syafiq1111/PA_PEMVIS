@@ -1,4 +1,6 @@
-﻿Public Class Form1
+﻿Imports System.Drawing.Printing
+
+Public Class Form1
     Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
         ' Memaksa semua form tersembunyi (termasuk FormLogin) ikut hancur dan melepas memori
         Application.Exit()
@@ -336,11 +338,60 @@
         End If
     End Sub
 
+    ' ======================= FITUR CETAK LAPORAN KARYAWAN =======================
+    Private Function SiapkanDataCetakKaryawan() As Boolean
+        Dim dt As DataTable = DataModule.GetAllKaryawanUntukLaporan()
+        If dt Is Nothing OrElse dt.Rows.Count = 0 Then
+            MessageBox.Show("Tidak ada data karyawan yang dapat dicetak.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return False
+        End If
+        PrintModule.SetLaporanData(dt, "Karyawan")
+        Return True
+    End Function
+
+    Private Sub btnPreviewCetak_Click(sender As Object, e As EventArgs) Handles btnPreviewCetak.Click
+        Try
+            If Not SiapkanDataCetakKaryawan() Then Exit Sub
+            docLaporan.DefaultPageSettings.Landscape = True   ' Bisa disesuaikan
+            dlgPreview.Document = docLaporan
+            dlgPreview.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show("Terjadi kesalahan saat menampilkan preview: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnCetak_Click(sender As Object, e As EventArgs) Handles btnCetak.Click
+        Try
+            If Not SiapkanDataCetakKaryawan() Then Exit Sub
+            docLaporan.DefaultPageSettings.Landscape = True
+            docLaporan.Print()
+        Catch ex As Exception
+            MessageBox.Show("Terjadi kesalahan saat mencetak dokumen: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub docLaporan_PrintPage(sender As Object, e As PrintPageEventArgs) Handles docLaporan.PrintPage
+        ' Render sesuai tipe data yang sudah diset di PrintModule
+        If PrintModule.LaporanTipe = "Karyawan" Then
+            PrintModule.RenderLaporanKaryawan(e)
+        Else
+            ' Fallback
+            Using f As New Font("Calibri", 12)
+                e.Graphics.DrawString("Tipe laporan tidak dikenali.", f, Brushes.Black, 50, 50)
+            End Using
+            e.HasMorePages = False
+        End If
+    End Sub
+
     Private Sub rdPria_CheckedChanged(sender As Object, e As EventArgs) Handles rdPria.CheckedChanged
 
     End Sub
 
     Private Sub rdWanita_CheckedChanged(sender As Object, e As EventArgs) Handles rdWanita.CheckedChanged
+
+    End Sub
+
+    Private Sub mtbHP_MaskInputRejected(sender As Object, e As MaskInputRejectedEventArgs) Handles mtbHP.MaskInputRejected
 
     End Sub
 End Class
