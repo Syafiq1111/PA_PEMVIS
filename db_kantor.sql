@@ -25,7 +25,8 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `karyawan`
 --
-
+CREATE DATABASE db_posttest_pemvis;
+USE db_posttest_pemvis;
 CREATE TABLE `karyawan` (
   `nik` varchar(255) NOT NULL,
   `nama` varchar(255) NOT NULL,

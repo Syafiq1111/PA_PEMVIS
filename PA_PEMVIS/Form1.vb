@@ -24,13 +24,10 @@
 
     ' MENAMPILKAN DATA KE DATA GRID VIEW
     Private Sub TampilData()
-        ' Fungsi getAllKaryawan() di DataModule otomatis menyaring kembalian DataTable 
-        ' berdasarkan state global CurrentRole & CurrentNIK yang aktif
         dgvKaryawan.DataSource = getAllKaryawan()
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Inisialisasi ComboBox Role dengan pilihan
         TampilData()
         Kosong()
         TerapkanHakAksesUI()
@@ -86,9 +83,8 @@
         Dim email As String = txtEmail.Text.Trim()
         Dim hp As String = mtbHP.Text.Trim()
         Dim password As String = txtPassword.Text.Trim()
-        Dim role As String = cbRole.SelectedItem.ToString().Trim() ' Mengambil nilai role dari combobox
+        Dim role As String = cbRole.SelectedItem.ToString().Trim()
 
-        ' Deteksi redundansi data di database
         If nikSudahAda(nik) Then
             MessageBox.Show("NIK sudah terdaftar di sistem, gunakan NIK lain.", "Peringatan Keamanan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             txtNIK.Focus()
@@ -101,7 +97,6 @@
             Return
         End If
 
-        ' Eksekusi penulisan record baru ke database
         If simpanKaryawan(nik, nama, email, hp, password, role) Then
             MessageBox.Show("Data karyawan berhasil disimpan ke database.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             TampilData()
@@ -123,16 +118,13 @@
         Dim hp As String = mtbHP.Text.Trim()
         Dim password As String = txtPassword.Text.Trim()
 
-        ' Penentuan Nilai Role (Aspek Proteksi Hak Akses)
         Dim role As String = cbRole.SelectedItem.ToString().Trim().ToLower()
 
         If CurrentRole = "karyawan" Then
-            ' Karyawan dipaksa tetap menjadi karyawan 
             ' untuk mencegah manipulasi teks via inspeksi runtime UI
             role = "karyawan"
         End If
 
-        ' 3. Eksekusi pembaruan data ke database
         If ubahKaryawan(nik, nama, email, hp, password, role) Then
             MessageBox.Show("Data diri Anda berhasil diperbarui!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
@@ -152,7 +144,6 @@
 
     ' LOGIKA HAPUS DATA (DELETE)
     Private Sub btnHapus_Click(sender As Object, e As EventArgs) Handles btnHapus.Click
-        ' Gerbang Otorisasi Tingkat Aksi
         If CurrentRole = "karyawan" Then
             MessageBox.Show("Akses Ditolak: Karyawan dilarang menghapus akun mandiri/orang lain.", "Pelanggaran Hak Akses", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             Exit Sub
@@ -249,7 +240,6 @@
 
     ' PENCARIAN LIVE-SEARCH TEXTBOX
     Private Sub txtCari_TextChanged(sender As Object, e As EventArgs) Handles txtCari.TextChanged
-        ' Jika karyawan mencoba menjebol bypass melalui input runtime text pencarian, paksa hentikan.
         If CurrentRole = "karyawan" Then Exit Sub
 
         If txtCari.Text.Trim() = "" Then
