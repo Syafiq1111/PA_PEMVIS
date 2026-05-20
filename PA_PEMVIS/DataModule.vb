@@ -157,9 +157,7 @@ Module DataModule
         End Try
     End Function
 
-    ' === TAMBAHAN PARAMETER jenis_kelamin As String ===
     Public Function ubahKaryawan(nik As String, nama As String, email As String, hp As String, jenis_kelamin As String, gaji As Integer, password As String, role As String) As Boolean
-        ' === UPDATE QUERY UPDATE UNTUK JENIS KELAMIN ===
         Dim query As String = "UPDATE karyawan SET nama = @nama, email = @email, jenis_kelamin = @jenis_kelamin, hp = @hp, gaji = @gaji, password = @password, role = @role WHERE nik = @nik"
         Using conn As MySqlConnection = GetConnection()
             Using cmd As New MySqlCommand(query, conn)
@@ -199,8 +197,6 @@ Module DataModule
         End Try
     End Function
 
-    ' --- SINKRONISASI MANAJEMEN CRUD TANGGUNGAN BERBASIS ATURAN USER ---
-
     Public Function getAllTanggungan(nik As String) As DataTable
         Dim dt As New DataTable()
         Try
@@ -236,7 +232,6 @@ Module DataModule
         Dim dt As New DataTable()
         Dim query As String = ""
 
-        ' Jika karyawan mencari, batasi cakupan pencarian hanya pada tanggungannya sendiri
         If CurrentRole = "admin" Then
             query = "SELECT id_tanggungan, nik_karyawan, nama, hubungan, status FROM tanggungan WHERE nama LIKE @keyword OR hubungan LIKE @keyword OR status LIKE @keyword OR nik_karyawan LIKE @keyword"
         Else
@@ -282,7 +277,6 @@ Module DataModule
     Public Function ubahTanggungan(id As Integer, nik_karyawan As String, nama As String, hubungan As String, status As String) As Boolean
         Try
             Dim query As String = ""
-            ' Keamanan Server-Side (Anti-IDOR Injection)
             If CurrentRole = "admin" Then
                 query = "UPDATE tanggungan SET nik_karyawan = @nik, nama = @nama, hubungan = @hubungan, status = @status WHERE id_tanggungan = @id"
             Else
@@ -330,7 +324,6 @@ Module DataModule
             Return False
         End Try
     End Function
-    ' ======================= LAPORAN KARYAWAN =======================
     Public Function GetAllKaryawanUntukLaporan() As DataTable
         Dim dt As New DataTable()
         Dim query As String = "SELECT nik, nama, email, hp, jenis_kelamin, gaji, role FROM karyawan ORDER BY nik ASC"
@@ -345,8 +338,6 @@ Module DataModule
         End Try
         Return dt
     End Function
-
-    ' ======================= LAPORAN TANGGUNGAN =======================
     Public Function GetAllTanggunganUntukLaporan(Optional ByVal filterNIK As String = "") As DataTable
         Dim dt As New DataTable()
         Dim query As String = "SELECT t.id_tanggungan, t.nik_karyawan, k.nama AS nama_karyawan, t.nama AS nama_tanggungan, t.hubungan, t.status FROM tanggungan t INNER JOIN karyawan k ON t.nik_karyawan = k.nik"

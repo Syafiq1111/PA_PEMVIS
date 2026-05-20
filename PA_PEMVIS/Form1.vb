@@ -2,13 +2,11 @@
 
 Public Class Form1
     Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
-        ' Memaksa semua form tersembunyi (termasuk FormLogin) ikut hancur dan melepas memori
         Application.Exit()
     End Sub
 
     Private Sub Kosong()
         txtNama.Clear()
-        ' Jika user adalah karyawan, NIK tidak boleh dibersihkan/diubah karena mutlak milik dirinya
         If CurrentRole <> "karyawan" Then
             txtNIK.Clear()
             txtNIK.Enabled = True
@@ -23,14 +21,12 @@ Public Class Form1
         txtGaji.Clear()
         cbRole.SelectedIndex = -1
 
-        ' === TAMBAHAN JENIS KELAMIN ===
         rdPria.Checked = False
         rdWanita.Checked = False
 
         ErrorProvider1.Clear()
     End Sub
 
-    ' MENAMPILKAN DATA KE DATA GRID VIEW
     Private Sub TampilData()
         dgvKaryawan.DataSource = getAllKaryawan()
     End Sub
@@ -40,19 +36,15 @@ Public Class Form1
         Kosong()
         TerapkanHakAksesUI()
     End Sub
-
-    ' OTORISASI BERDASARKAN ROLE
     Private Sub TerapkanHakAksesUI()
         If CurrentRole = "karyawan" Then
             ' Proteksi Struktural Karyawan
-            btnSimpan.Enabled = False   ' Tidak boleh mendaftarkan karyawan baru
-            btnHapus.Enabled = False    ' Tidak boleh menghapus akun
-            txtCari.Enabled = False     ' Tidak boleh mencari data karyawan lain
-            cbRole.Enabled = False      ' Tidak boleh mengubah role
+            btnSimpan.Enabled = False
+            btnHapus.Enabled = False
+            txtCari.Enabled = False
+            cbRole.Enabled = False
+            txtGaji.Enabled = False
 
-            txtGaji.Enabled = False     ' (Karyawan HANYA BISA MELIHAT)
-
-            ' Muat data profil diri secara langsung ke kolom input text
             AmbilProfilMandiri()
         ElseIf CurrentRole = "admin" Then
             ' Akses Penuh Admin
@@ -60,13 +52,12 @@ Public Class Form1
             btnSimpan.Enabled = True
             btnHapus.Enabled = True
             txtCari.Enabled = True
-            cbRole.Enabled = True       ' Admin dapat memilih role
+            cbRole.Enabled = True
 
-            txtGaji.Enabled = True      ' (Admin BISA MENGISI & MENGUBAH)
+            txtGaji.Enabled = True
         End If
     End Sub
 
-    ' METODE PENGAMBILAN DATA PROFIL MANDIRI KARYAWAN
     Private Sub AmbilProfilMandiri()
         Dim dt As DataTable = getNIK(CurrentNIK)
         If dt.Rows.Count > 0 Then
@@ -77,7 +68,6 @@ Public Class Form1
             txtPassword.Text = dt.Rows(0)("password").ToString()
             txtGaji.Text = dt.Rows(0)("gaji").ToString()
 
-            ' === TAMBAHAN JENIS KELAMIN ===
             Dim jk As String = dt.Rows(0)("jenis_kelamin").ToString()
             If jk = "Pria" Then
                 rdPria.Checked = True
@@ -85,13 +75,11 @@ Public Class Form1
                 rdWanita.Checked = True
             End If
 
-            ' --- ISI RUNTIME COMBOBOX ROLE ---
             cbRole.SelectedItem = dt.Rows(0)("role").ToString()
-            cbRole.Enabled = False ' Kunci akses modifikasi langsung bagi karyawan
+            cbRole.Enabled = False
         End If
     End Sub
 
-    ' LOGIKA TAMBAH DATA (CREATE)
     Private Sub btnSimpan_Click(sender As Object, e As EventArgs) Handles btnSimpan.Click
         ErrorProvider1.Clear()
 
@@ -133,7 +121,6 @@ Public Class Form1
             Return
         End If
 
-        ' === PERHATIAN: Tambahkan parameter jenis_kelamin pada fungsi simpanKaryawan di Module ===
         If simpanKaryawan(nik, nama, email, hp, jenis_kelamin, gaji, password, role) Then
             MessageBox.Show("Data karyawan berhasil disimpan ke database.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             TampilData()
@@ -141,7 +128,6 @@ Public Class Form1
         End If
     End Sub
 
-    ' LOGIKA UBAH DATA (UPDATE)
     Private Sub btnUbah_Click(sender As Object, e As EventArgs) Handles btnUbah.Click
         ErrorProvider1.Clear()
 
@@ -191,7 +177,6 @@ Public Class Form1
         End If
     End Sub
 
-    ' LOGIKA HAPUS DATA (DELETE)
     Private Sub btnHapus_Click(sender As Object, e As EventArgs) Handles btnHapus.Click
         If CurrentRole = "karyawan" Then
             MessageBox.Show("Akses Ditolak: Karyawan dilarang menghapus akun mandiri/orang lain.", "Pelanggaran Hak Akses", MessageBoxButtons.OK, MessageBoxIcon.Stop)
@@ -216,14 +201,12 @@ Public Class Form1
         End If
     End Sub
 
-    ' PEMBATALAN DAN RESET FORM
     Private Sub btnBatal_Click(sender As Object, e As EventArgs) Handles btnBatal.Click
         Kosong()
         TampilData()
         TerapkanHakAksesUI()
     End Sub
 
-    ' DATA BINDING GRID VIEW KE INPUT FIELD
     Private Sub dgvKaryawan_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvKaryawan.CellClick
         If e.RowIndex >= 0 Then
             Dim selectedNIK As String = dgvKaryawan.Rows(e.RowIndex).Cells("NIK").Value.ToString()
@@ -249,7 +232,6 @@ Public Class Form1
                 cbRole.SelectedItem = dt.Rows(0)("role").ToString()
                 txtGaji.Text = dt.Rows(0)("gaji").ToString()
 
-                ' === TAMBAHAN JENIS KELAMIN ===
                 Dim jk As String = dt.Rows(0)("jenis_kelamin").ToString()
                 If jk = "Pria" Then
                     rdPria.Checked = True
@@ -260,7 +242,6 @@ Public Class Form1
         End If
     End Sub
 
-    ' AKSES NAVIGASI KEYBOARD NIK PRESS ENTER
     Private Sub txtNIK_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtNIK.KeyPress
         If IsEnterKey(e) Then
             e.Handled = True
@@ -282,7 +263,6 @@ Public Class Form1
                 cbRole.SelectedItem = dt.Rows(0)("role").ToString()
                 txtGaji.Text = dt.Rows(0)("gaji").ToString()
 
-                ' === TAMBAHAN JENIS KELAMIN ===
                 Dim jk As String = dt.Rows(0)("jenis_kelamin").ToString()
                 If jk = "Pria" Then
                     rdPria.Checked = True
@@ -290,7 +270,7 @@ Public Class Form1
                     rdWanita.Checked = True
                 End If
             Else
-                Kosong() ' Panggil Kosong() agar lebih efisien mereset semua termasuk radio button
+                Kosong()
                 MessageBox.Show("Data tidak ditemukan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
             txtNIK.Focus()
@@ -338,7 +318,6 @@ Public Class Form1
         End If
     End Sub
 
-    ' ======================= FITUR CETAK LAPORAN KARYAWAN =======================
     Private Function SiapkanDataCetakKaryawan() As Boolean
         Dim dt As DataTable = DataModule.GetAllKaryawanUntukLaporan()
         If dt Is Nothing OrElse dt.Rows.Count = 0 Then
@@ -352,7 +331,7 @@ Public Class Form1
     Private Sub btnPreviewCetak_Click(sender As Object, e As EventArgs) Handles btnPreviewCetak.Click
         Try
             If Not SiapkanDataCetakKaryawan() Then Exit Sub
-            docLaporan.DefaultPageSettings.Landscape = True   ' Bisa disesuaikan
+            docLaporan.DefaultPageSettings.Landscape = True
             dlgPreview.Document = docLaporan
             dlgPreview.ShowDialog()
         Catch ex As Exception
@@ -371,11 +350,9 @@ Public Class Form1
     End Sub
 
     Private Sub docLaporan_PrintPage(sender As Object, e As PrintPageEventArgs) Handles docLaporan.PrintPage
-        ' Render sesuai tipe data yang sudah diset di PrintModule
         If PrintModule.LaporanTipe = "Karyawan" Then
             PrintModule.RenderLaporanKaryawan(e)
         Else
-            ' Fallback
             Using f As New Font("Calibri", 12)
                 e.Graphics.DrawString("Tipe laporan tidak dikenali.", f, Brushes.Black, 50, 50)
             End Using

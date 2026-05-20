@@ -56,7 +56,6 @@
 
         Dim gajiValid As Boolean = ValidasiTextBox(ep, txtGaji, "Gaji tidak boleh kosong")
 
-        ' Semua kondisi harus bernilai True agar data dinyatakan valid (tambah And gajiValid)
         Return nikValid And namaValid And emailValid And hpValid And passValid And roleValid And gajiValid
     End Function
 

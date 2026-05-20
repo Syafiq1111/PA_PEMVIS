@@ -3,10 +3,9 @@ Imports System.Drawing
 
 Module PrintModule
 
-    ' Data yang akan dicetak
     Public LaporanData As DataTable = Nothing
     Public CurrentRow As Integer = 0
-    Public LaporanTipe As String = ""   ' "Karyawan" atau "Tanggungan"
+    Public LaporanTipe As String = ""
 
     Public Sub SetLaporanData(data As DataTable, tipe As String)
         LaporanData = data
@@ -14,10 +13,9 @@ Module PrintModule
         LaporanTipe = tipe
     End Sub
 
-    ' ======================= RENDER LAPORAN KARYAWAN =======================
     Public Sub RenderLaporanKaryawan(e As PrintPageEventArgs)
         If LaporanData Is Nothing OrElse LaporanData.Rows.Count = 0 Then
-            Using fontKosong As New Font("Calibri", 12, FontStyle.Regular)
+            Using fontKosong As New Font("Segoe UI", 12, FontStyle.Regular)
                 e.Graphics.DrawString("Tidak ada data karyawan yang dapat dicetak.", fontKosong, Brushes.Black, 50, 50)
             End Using
             e.HasMorePages = False
@@ -26,36 +24,39 @@ Module PrintModule
 
         Dim area As Rectangle = e.MarginBounds
         Dim currentY As Integer = area.Top
-        Dim rowHeight As Integer = 28
+        Dim rowHeight As Integer = 32
 
-        Using fontJudul As New Font("Times New Roman", 18, FontStyle.Bold),
-              fontSubJudul As New Font("Calibri", 10, FontStyle.Italic),
-              fontHeader As New Font("Calibri", 10, FontStyle.Bold),
-              fontIsi As New Font("Calibri", 10, FontStyle.Regular),
-              penaTabel As New Pen(Color.Black, 1),
-              brushHeader As New SolidBrush(Color.Gainsboro)
+        ' Setup Gaya Visual Modern
+        Dim warnaTema As Color = Color.FromArgb(0, 120, 215)
+        Using fontJudul As New Font("Segoe UI", 20, FontStyle.Bold),
+              fontSubJudul As New Font("Segoe UI", 10, FontStyle.Italic),
+              fontHeader As New Font("Segoe UI", 10, FontStyle.Bold),
+              fontIsi As New Font("Segoe UI", 10, FontStyle.Regular),
+              penaGarisTebal As New Pen(warnaTema, 2),
+              penaTabel As New Pen(Color.LightGray, 1),
+              brushHeaderBg As New SolidBrush(warnaTema),
+              brushHeaderTeks As New SolidBrush(Color.White),
+              brushTeks As New SolidBrush(Color.FromArgb(40, 40, 40))
 
-            ' Judul
-            e.Graphics.DrawString("LAPORAN DATA KARYAWAN", fontJudul, Brushes.Black, area.Left, currentY)
-            currentY += 30
+            e.Graphics.DrawString("LAPORAN DATA KARYAWAN", fontJudul, brushHeaderBg, area.Left, currentY)
+            currentY += 35
             e.Graphics.DrawString("Perpustakaan - Hasil Cetak Sistem", fontSubJudul, Brushes.Gray, area.Left, currentY)
-            currentY += 20
-            e.Graphics.DrawLine(penaTabel, area.Left, currentY, area.Right, currentY)
-            currentY += 10
+            currentY += 25
 
-            ' Header tabel
+            e.Graphics.DrawLine(penaGarisTebal, area.Left, currentY, area.Right, currentY)
+            currentY += 15
+
             Dim kolom() As String = {"NIK", "Nama", "Email", "HP", "JK", "Gaji", "Role"}
-            Dim lebar() As Integer = {100, 150, 180, 100, 50, 100, 100}
+            Dim lebar() As Integer = {150, 170, 220, 130, 60, 120, 100}
             Dim x As Integer = area.Left
 
             For i As Integer = 0 To kolom.Length - 1
                 Dim rect As New Rectangle(x, currentY, lebar(i), rowHeight)
-                DrawCell(e.Graphics, kolom(i), fontHeader, Brushes.Black, penaTabel, rect, StringAlignment.Center, brushHeader)
+                DrawCell(e.Graphics, kolom(i), fontHeader, brushHeaderTeks, penaTabel, rect, StringAlignment.Center, brushHeaderBg)
                 x += lebar(i)
             Next
             currentY += rowHeight
 
-            ' Isi data
             While CurrentRow < LaporanData.Rows.Count
                 If currentY + rowHeight > area.Bottom - 30 Then
                     e.HasMorePages = True
@@ -73,28 +74,32 @@ Module PrintModule
                     row("role").ToString()
                 }
                 x = area.Left
+
+                Dim brushBaris As SolidBrush = If(CurrentRow Mod 2 = 0, New SolidBrush(Color.White), New SolidBrush(Color.FromArgb(245, 247, 250)))
+
                 For i As Integer = 0 To isi.Length - 1
                     Dim rect As New Rectangle(x, currentY, lebar(i), rowHeight)
                     Dim alignment As StringAlignment = If(i = 0 Or i = 5, StringAlignment.Center, StringAlignment.Near)
-                    DrawCell(e.Graphics, isi(i), fontIsi, Brushes.Black, penaTabel, rect, alignment)
+                    DrawCell(e.Graphics, isi(i), fontIsi, brushTeks, penaTabel, rect, alignment, brushBaris)
                     x += lebar(i)
                 Next
+
+                brushBaris.Dispose()
                 currentY += rowHeight
                 CurrentRow += 1
             End While
 
-            ' Footer total data
-            e.Graphics.DrawString("Total Data: " & LaporanData.Rows.Count.ToString(),
-                                  New Font("Calibri", 9, FontStyle.Italic),
-                                  Brushes.Black, area.Left, currentY + 8)
+            currentY += 10
+            e.Graphics.DrawString("Total Data: " & LaporanData.Rows.Count.ToString() & " Karyawan",
+                                  New Font("Segoe UI", 9, FontStyle.Italic),
+                                  Brushes.Gray, area.Left, currentY)
         End Using
         e.HasMorePages = False
     End Sub
 
-    ' ======================= RENDER LAPORAN TANGGUNGAN =======================
     Public Sub RenderLaporanTanggungan(e As PrintPageEventArgs)
         If LaporanData Is Nothing OrElse LaporanData.Rows.Count = 0 Then
-            Using fontKosong As New Font("Calibri", 12, FontStyle.Regular)
+            Using fontKosong As New Font("Segoe UI", 12, FontStyle.Regular)
                 e.Graphics.DrawString("Tidak ada data tanggungan yang dapat dicetak.", fontKosong, Brushes.Black, 50, 50)
             End Using
             e.HasMorePages = False
@@ -103,36 +108,37 @@ Module PrintModule
 
         Dim area As Rectangle = e.MarginBounds
         Dim currentY As Integer = area.Top
-        Dim rowHeight As Integer = 28
+        Dim rowHeight As Integer = 32
 
-        Using fontJudul As New Font("Times New Roman", 18, FontStyle.Bold),
-              fontSubJudul As New Font("Calibri", 10, FontStyle.Italic),
-              fontHeader As New Font("Calibri", 10, FontStyle.Bold),
-              fontIsi As New Font("Calibri", 10, FontStyle.Regular),
-              penaTabel As New Pen(Color.Black, 1),
-              brushHeader As New SolidBrush(Color.Gainsboro)
+        Dim warnaTema As Color = Color.FromArgb(0, 120, 215)
+        Using fontJudul As New Font("Segoe UI", 20, FontStyle.Bold),
+              fontSubJudul As New Font("Segoe UI", 10, FontStyle.Italic),
+              fontHeader As New Font("Segoe UI", 10, FontStyle.Bold),
+              fontIsi As New Font("Segoe UI", 10, FontStyle.Regular),
+              penaGarisTebal As New Pen(warnaTema, 2),
+              penaTabel As New Pen(Color.LightGray, 1),
+              brushHeaderBg As New SolidBrush(warnaTema),
+              brushHeaderTeks As New SolidBrush(Color.White),
+              brushTeks As New SolidBrush(Color.FromArgb(40, 40, 40))
 
-            ' Judul
-            e.Graphics.DrawString("LAPORAN DATA TANGGUNGAN KARYAWAN", fontJudul, Brushes.Black, area.Left, currentY)
-            currentY += 30
+            e.Graphics.DrawString("LAPORAN DATA TANGGUNGAN", fontJudul, brushHeaderBg, area.Left, currentY)
+            currentY += 35
             e.Graphics.DrawString("Perpustakaan - Hasil Cetak Sistem", fontSubJudul, Brushes.Gray, area.Left, currentY)
-            currentY += 20
-            e.Graphics.DrawLine(penaTabel, area.Left, currentY, area.Right, currentY)
-            currentY += 10
+            currentY += 25
+            e.Graphics.DrawLine(penaGarisTebal, area.Left, currentY, area.Right, currentY)
+            currentY += 15
 
-            ' Header tabel
             Dim kolom() As String = {"NIK Karyawan", "Nama Karyawan", "Nama Tanggungan", "Hubungan", "Status"}
-            Dim lebar() As Integer = {100, 150, 150, 100, 100}
+            Dim lebar() As Integer = {130, 170, 170, 100, 100}
             Dim x As Integer = area.Left
 
             For i As Integer = 0 To kolom.Length - 1
                 Dim rect As New Rectangle(x, currentY, lebar(i), rowHeight)
-                DrawCell(e.Graphics, kolom(i), fontHeader, Brushes.Black, penaTabel, rect, StringAlignment.Center, brushHeader)
+                DrawCell(e.Graphics, kolom(i), fontHeader, brushHeaderTeks, penaTabel, rect, StringAlignment.Center, brushHeaderBg)
                 x += lebar(i)
             Next
             currentY += rowHeight
 
-            ' Isi data
             While CurrentRow < LaporanData.Rows.Count
                 If currentY + rowHeight > area.Bottom - 30 Then
                     e.HasMorePages = True
@@ -148,29 +154,34 @@ Module PrintModule
                     row("status").ToString()
                 }
                 x = area.Left
+
+                Dim brushBaris As SolidBrush = If(CurrentRow Mod 2 = 0, New SolidBrush(Color.White), New SolidBrush(Color.FromArgb(245, 247, 250)))
+
                 For i As Integer = 0 To isi.Length - 1
                     Dim rect As New Rectangle(x, currentY, lebar(i), rowHeight)
-                    DrawCell(e.Graphics, isi(i), fontIsi, Brushes.Black, penaTabel, rect, StringAlignment.Near)
+                    DrawCell(e.Graphics, isi(i), fontIsi, brushTeks, penaTabel, rect, StringAlignment.Near, brushBaris)
                     x += lebar(i)
                 Next
+
+                brushBaris.Dispose()
                 currentY += rowHeight
                 CurrentRow += 1
             End While
 
-            ' Footer total data
-            e.Graphics.DrawString("Total Data: " & LaporanData.Rows.Count.ToString(),
-                                  New Font("Calibri", 9, FontStyle.Italic),
-                                  Brushes.Black, area.Left, currentY + 8)
+            currentY += 10
+            e.Graphics.DrawString("Total Data: " & LaporanData.Rows.Count.ToString() & " Tanggungan",
+                                  New Font("Segoe UI", 9, FontStyle.Italic),
+                                  Brushes.Gray, area.Left, currentY)
         End Using
         e.HasMorePages = False
     End Sub
 
-    ' ======================= FUNGSI BANTU MENGGAMBAR SEL =======================
     Private Sub DrawCell(g As Graphics, text As String, font As Font, brush As Brush, pen As Pen,
                          rect As Rectangle, alignment As StringAlignment, Optional fillBrush As Brush = Nothing)
         If fillBrush IsNot Nothing Then
             g.FillRectangle(fillBrush, rect)
         End If
+
         g.DrawRectangle(pen, rect)
 
         Dim sf As New StringFormat()
@@ -178,7 +189,7 @@ Module PrintModule
         sf.LineAlignment = StringAlignment.Center
         sf.Trimming = StringTrimming.EllipsisCharacter
 
-        Dim innerRect As New Rectangle(rect.X + 4, rect.Y + 2, rect.Width - 8, rect.Height - 4)
+        Dim innerRect As New Rectangle(rect.X + 6, rect.Y, rect.Width - 12, rect.Height)
         g.DrawString(text, font, brush, innerRect, sf)
     End Sub
 

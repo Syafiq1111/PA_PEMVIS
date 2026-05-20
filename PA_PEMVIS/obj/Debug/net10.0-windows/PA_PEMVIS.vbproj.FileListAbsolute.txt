@@ -94,3 +94,4 @@ C:\KULIAH\PA\PEMVIS\PA_PEMVIS-main\PA_PEMVIS\obj\Debug\net10.0-windows\PA_PEMVIS
 C:\KULIAH\PA\PEMVIS\PA_PEMVIS-main\PA_PEMVIS\obj\Debug\net10.0-windows\PA_PEMVIS.genruntimeconfig.cache
 C:\KULIAH\PA\PEMVIS\PA_PEMVIS-main\PA_PEMVIS\obj\Debug\net10.0-windows\ref\PA_PEMVIS.dll
 C:\KULIAH\PA\PEMVIS\PA_PEMVIS-main\PA_PEMVIS\obj\Debug\net10.0-windows\PA_PEMVIS.Resources.resources
+D:\PA_PEMVIS\PA_PEMVIS\PA_PEMVIS\obj\Debug\net10.0-windows\PA_PEMVIS.Resources.resources
