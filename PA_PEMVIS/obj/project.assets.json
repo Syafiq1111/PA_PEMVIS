@@ -200,19 +200,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\oru\\.nuget\\packages\\": {}
+    "C:\\Users\\lenovo\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\oru\\source\\repos\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj",
+      "projectUniqueName": "D:\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj",
       "projectName": "PA_PEMVIS",
-      "projectPath": "C:\\Users\\oru\\source\\repos\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj",
-      "packagesPath": "C:\\Users\\oru\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\oru\\source\\repos\\PA_PEMVIS\\PA_PEMVIS\\obj\\",
+      "projectPath": "D:\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS.vbproj",
+      "packagesPath": "C:\\Users\\lenovo\\.nuget\\packages\\",
+      "outputPath": "D:\\PA_PEMVIS\\PA_PEMVIS\\PA_PEMVIS\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\oru\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -220,11 +225,11 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0-windows7.0": {
-          "framework": "net10.0-windows7.0",
           "targetAlias": "net10.0-windows",
           "projectReferences": {}
         }
@@ -243,7 +248,6 @@
     },
     "frameworks": {
       "net10.0-windows7.0": {
-        "framework": "net10.0-windows7.0",
         "targetAlias": "net10.0-windows",
         "dependencies": {
           "MySqlConnector": {
