@@ -12,8 +12,8 @@
       }
     ],
     "additionalProbingPaths": [
-      "C:\\Users\\oru\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\oru\\.nuget\\packages"
+      "C:\\Users\\USER-GK\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\USER-GK\\.nuget\\packages"
     ],
     "configProperties": {
       "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false,
