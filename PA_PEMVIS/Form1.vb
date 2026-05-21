@@ -303,6 +303,7 @@ Public Class Form1
 
     Private Sub btnForm2_Click(sender As Object, e As EventArgs) Handles btnForm2.Click
         Form2.Show()
+        Form2.RefreshDataTanggungan()
         Me.Hide()
     End Sub
 
